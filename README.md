@@ -6,7 +6,11 @@ Snapzy is a free Windows screen-capture tool for selected areas, windows, and lo
 
 ## Download
 
-The first public release, **Snapzy 1.0.0**, is being prepared. The installer will be published here after capture, editing, installation, and update checks are complete.
+**Snapzy 1.0.0 for Windows (64-bit)**
+
+[Download the installer](https://github.com/jairlinethai8989/snapzy-releases/raw/refs/heads/main/downloads/Snapzy-Setup-1.0.0.exe) · [Release notes](releases/v1.0.0.md) · [Verify SHA-256](checksums/Snapzy-Setup-1.0.0.exe.sha256)
+
+The installer is not code-signed, so Windows SmartScreen may show a warning. Review the release notes and verify the checksum before installing. Snapzy uses a separate app identity and installation profile from the private Neo Snap build.
 
 ## Highlights
 
@@ -46,7 +50,11 @@ Snapzy เป็นโปรแกรมจับภาพหน้าจอฟ�
 
 ## ดาวน์โหลด
 
-กำลังเตรียมรุ่นสาธารณะ **Snapzy 1.0.0** โดยจะเผยแพร่ตัวติดตั้งหลังตรวจสอบการจับภาพ การตกแต่ง การติดตั้ง และการอัปเดตเรียบร้อยแล้ว
+**Snapzy 1.0.0 สำหรับ Windows (64-bit)**
+
+[ดาวน์โหลดตัวติดตั้ง](https://github.com/jairlinethai8989/snapzy-releases/raw/refs/heads/main/downloads/Snapzy-Setup-1.0.0.exe) · [บันทึกประจำรุ่น](releases/v1.0.0.md) · [ตรวจสอบ SHA-256](checksums/Snapzy-Setup-1.0.0.exe.sha256)
+
+ตัวติดตั้งยังไม่มีลายเซ็นดิจิทัล Windows SmartScreen จึงอาจแสดงคำเตือน โปรดอ่านบันทึกประจำรุ่นและตรวจสอบ checksum ก่อนติดตั้ง Snapzy ใช้ตัวตนและโปรไฟล์ติดตั้งแยกจาก Neo Snap รุ่น private ภายในบริษัท
 
 ## ความสามารถ
 
