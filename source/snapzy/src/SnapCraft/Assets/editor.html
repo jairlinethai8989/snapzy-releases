@@ -1,0 +1,107 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>แก้ไขภาพ • SnapZy</title><link rel="stylesheet" href="app.css"></head>
+<body class="editor-page">
+  <header class="topbar">
+    <a class="brand-link" href="#" id="homeLink"><img src="icons/snapzy.svg" data-product-icon alt=""><b>SnapZy</b></a>
+    <button class="editor-about" id="editorAbout" title="เกี่ยวกับ SnapZy"><small id="appVersion">v1.0.0</small></button>
+    <div class="file-info"><i></i><span><b>ภาพหน้าจอ</b><small id="imageInfo">กำลังเตรียมภาพ...</small></span></div>
+    <div class="top-actions"><button id="languageToggle" class="language-toggle" data-language-toggle type="button" aria-label="ภาษา">TH</button><button class="icon-button" id="editorHelpButton" title="วิธีใช้เครื่องมือ" aria-label="วิธีใช้เครื่องมือ"><i data-lucide="circle-help"></i></button><button class="icon-button" id="combineButton" title="รวมภาพจากแท็บ"><i data-lucide="layers"></i></button><button class="icon-button" id="addImagesButton" title="เพิ่มภาพ"><i data-lucide="image-plus"></i></button><button class="icon-button" id="openProjectButton" title="เปิดงาน SnapZy"><i data-lucide="folder-open"></i></button><button class="icon-button" id="saveProjectButton" title="บันทึกงานเพื่อแก้ไขต่อ"><i data-lucide="save"></i></button><button class="icon-button" id="copyButton" title="คัดลอกภาพ"><i data-lucide="copy"></i></button><button class="save-button" id="downloadButton"><i data-lucide="download"></i>บันทึก PNG</button></div>
+  </header>
+  <main class="editor-workspace">
+    <nav class="tool-row" aria-label="เครื่องมือ">
+      <button class="tool" id="workspaceSizeButton" title="ขนาดพื้นที่งาน"><i data-lucide="maximize"></i><span>พื้นที่งาน</span></button>
+      <button class="tool active" data-tool="select" title="เลือกและย้ายวัตถุ"><i data-lucide="mouse-pointer-2"></i><span>เลือก</span></button>
+      <button class="tool" data-tool="crop" title="ครอบตัดภาพ"><i data-lucide="crop"></i><span>ครอบตัด</span></button>
+      <button class="tool" data-tool="pen" title="วาดเส้นอิสระ"><i data-lucide="pencil"></i><span>ปากกา</span></button>
+      <button class="tool" data-tool="highlight" title="ปากกาไฮไลต์"><i data-lucide="highlighter"></i><span>ไฮไลต์</span></button>
+      <button class="tool" data-tool="line" title="วาดเส้นตรง"><i data-lucide="slash"></i><span>เส้น</span></button>
+      <button class="tool" data-tool="arrow" title="วาดลูกศร"><i data-lucide="arrow-up-right"></i><span>ลูกศร</span></button>
+      <div class="shape-group" data-shape-group="outline">
+        <button class="tool shape-primary" data-tool="box" title="กรอบสี่เหลี่ยมโปร่ง"><i data-lucide="square"></i><span>กรอบ</span></button>
+        <button class="shape-toggle" aria-label="เลือกรูปทรงโปร่ง" aria-expanded="false" aria-controls="outlineShapes"><i data-lucide="chevron-down"></i></button>
+        <div class="shape-menu" id="outlineShapes" role="group" aria-label="รูปทรงโปร่ง" hidden>
+          <button data-tool="box" title="กรอบสี่เหลี่ยมโปร่ง"><i data-lucide="square"></i>สี่เหลี่ยมโปร่ง</button>
+          <button data-tool="ellipse" title="กรอบวงกลมโปร่ง"><i data-lucide="circle"></i>วงกลมโปร่ง</button>
+        </div>
+      </div>
+      <div class="shape-group" data-shape-group="filled">
+        <button class="tool shape-primary filled-shape" data-tool="block" title="สี่เหลี่ยมทึบ"><i data-lucide="square"></i><span>ทึบ</span></button>
+        <button class="shape-toggle" aria-label="เลือกรูปทรงทึบ" aria-expanded="false" aria-controls="filledShapes"><i data-lucide="chevron-down"></i></button>
+        <div class="shape-menu" id="filledShapes" role="group" aria-label="รูปทรงทึบ" hidden>
+          <button class="filled-shape" data-tool="block" title="สี่เหลี่ยมทึบ"><i data-lucide="square"></i>สี่เหลี่ยมทึบ</button>
+          <button class="filled-shape" data-tool="ellipseFill" title="วงกลมทึบ"><i data-lucide="circle"></i>วงกลมทึบ</button>
+        </div>
+      </div>
+      <button class="tool" data-tool="blur" title="เบลอเฉพาะพื้นที่" aria-label="เบลอเฉพาะพื้นที่"><i data-lucide="droplet"></i><span>เบลอ</span></button>
+      <button class="tool" data-tool="number" title="เลขลำดับในวงกลม"><i data-lucide="circle"></i><b class="number-icon" aria-hidden="true">1</b><span>เลขลำดับ</span></button>
+      <button class="tool" data-tool="text" title="วางข้อความบนภาพ"><i data-lucide="type"></i><span>ข้อความ</span></button>
+      <button class="tool" data-tool="bubble" title="ช่องคำพูด"><i data-lucide="message-square"></i><span>ช่องคำพูด</span></button>
+      <span class="tool-separator"></span>
+      <div class="layer-order" role="group" aria-label="ลำดับชั้น">
+        <button class="tool" id="layerFrontButton" title="นำไปไว้บนสุด" aria-label="นำไปไว้บนสุด" disabled><i data-lucide="arrow-up-to-line"></i></button>
+        <button class="tool" id="layerUpButton" title="เลื่อนขึ้นหนึ่งชั้น" aria-label="เลื่อนขึ้นหนึ่งชั้น" disabled><i data-lucide="arrow-up"></i></button>
+        <button class="tool" id="layerDownButton" title="เลื่อนลงหนึ่งชั้น" aria-label="เลื่อนลงหนึ่งชั้น" disabled><i data-lucide="arrow-down"></i></button>
+        <button class="tool" id="layerBackButton" title="ส่งไปไว้ล่างสุด" aria-label="ส่งไปไว้ล่างสุด" disabled><i data-lucide="arrow-down-to-line"></i></button>
+      </div>
+      <span class="tool-separator"></span>
+      <button class="tool" id="deleteButton" title="ลบวัตถุ"><i data-lucide="trash-2"></i><span>ลบ</span></button>
+      <button class="tool" id="undoButton" title="ย้อนกลับ"><i data-lucide="undo-2"></i><span>ย้อนกลับ</span></button>
+      <button class="tool" id="redoButton" title="ทำซ้ำ"><i data-lucide="redo-2"></i><span>ทำซ้ำ</span></button>
+      <button class="tool" id="clearButton" title="ล้างวัตถุทั้งหมด"><i data-lucide="eraser"></i><span>ล้าง</span></button>
+    </nav>
+    <section class="style-row">
+      <div class="palette-control"><span>สี</span><button id="paletteButton" class="palette-button" title="จานสี" aria-label="จานสี" aria-expanded="false" aria-controls="colorPalette"><span id="colorPreview"></span><i data-lucide="chevron-down"></i></button><input id="colorInput" type="color" value="#ef3340" hidden><output id="colorValue">#EF3340</output></div>
+      <label>ขนาด <input id="sizeInput" type="range" min="2" max="32" value="5"><output id="sizeValue">5 px</output></label>
+      <div class="stroke-control" role="group" aria-label="รูปแบบเส้น">
+        <button type="button" data-stroke="solid" title="เส้นทึบ" aria-label="เส้นทึบ" aria-pressed="true"><span></span></button>
+        <button type="button" data-stroke="dashed" title="เส้นประ" aria-label="เส้นประ" aria-pressed="false"><span></span></button>
+        <button type="button" data-stroke="dotted" title="เส้นจุด" aria-label="เส้นจุด" aria-pressed="false"><span></span></button>
+      </div>
+      <label>ความเข้ม <input id="opacityInput" type="range" min="0" max="100" value="100"><output id="opacityValue">100%</output></label>
+      <div class="effect-control"><label><input id="shadowEnabled" type="checkbox">เงา</label><button id="shadowSettingsButton" class="effect-settings" data-effect-popover="shadowSettings" aria-expanded="false" title="ตั้งค่าเงา" aria-label="ตั้งค่าเงา"><i data-lucide="sliders-horizontal"></i></button></div>
+      <div class="effect-control" id="textEffects" hidden><label><input id="outlineEnabled" type="checkbox">ขอบอักษร</label><button id="textSettingsButton" class="effect-settings" data-effect-popover="textSettings" aria-expanded="false" title="ตั้งค่าขอบอักษรและช่องคำพูด" aria-label="ตั้งค่าขอบอักษรและช่องคำพูด"><i data-lucide="sliders-horizontal"></i></button></div>
+      <div class="crop-actions" id="cropActions" hidden><button type="button" id="applyCrop" title="ใช้การครอบตัด"><i data-lucide="check"></i>ใช้</button><button type="button" id="cancelCrop" title="ยกเลิกการครอบตัด"><i data-lucide="x"></i>ยกเลิก</button></div>
+      <div class="view-control" role="group" aria-label="ขนาดการแสดงภาพ"><button type="button" data-view="fit" title="พอดีความกว้าง" aria-label="พอดีความกว้าง" aria-pressed="true"><i data-lucide="maximize"></i></button><button type="button" data-view="actual" title="แสดงภาพ 100%" aria-label="แสดงภาพ 100%" aria-pressed="false">100%</button></div>
+    </section>
+    <section class="canvas-stage" id="stage"><div class="loading" id="loading"><span></span><p>กำลังเตรียมภาพ...</p></div><canvas id="canvas"></canvas></section>
+  </main>
+  <div class="toast" id="toast" role="status"></div>
+  <input type="file" id="imageFiles" accept="image/png,image/jpeg,image/webp,image/bmp" multiple hidden>
+  <input type="file" id="projectFile" accept=".neosnap" hidden>
+  <dialog class="project-dialog" id="addImagesDialog"><h2>เพิ่มภาพ</h2><div class="project-command-row"><button id="chooseImageFiles"><i data-lucide="folder-open"></i>จากไฟล์</button><button id="pasteImageButton"><i data-lucide="clipboard"></i>จากคลิปบอร์ด</button><button id="addCaptureTabs"><i data-lucide="layers"></i>จากแท็บ</button></div><button id="closeAddImages">ปิด</button></dialog>
+  <div class="image-layer-actions" id="imageLayerActions" hidden><label>กว้าง <input id="layerWidth" type="number" min="20" max="32767"> px</label><label>สูง <input id="layerHeight" type="number" min="20" max="32767"> px</label><button id="applyLayerSize" title="ใช้ขนาดภาพ"><i data-lucide="check"></i></button></div>
+  <dialog class="project-dialog" id="projectSaveDialog"><h2>บันทึกงาน</h2><p>ไฟล์งานเก็บภาพต้นฉบับ รวมถึงข้อมูลที่เบลอหรือปิดทับไว้</p><div class="project-command-row"><button id="confirmProjectSave"><i data-lucide="save"></i>บันทึก .neosnap</button><button id="cancelProjectSave">ยกเลิก</button></div></dialog>
+  <dialog class="project-dialog" id="workspaceSizeDialog"><h2>ขนาดพื้นที่งาน</h2><div class="project-command-row"><label>กว้าง <input id="workspaceWidth" type="number" min="1" max="32767"> px</label><label>สูง <input id="workspaceHeight" type="number" min="1" max="32767"> px</label></div><div class="project-command-row"><button id="confirmWorkspaceSize"><i data-lucide="check"></i>ใช้</button><button id="cancelWorkspaceSize">ยกเลิก</button></div></dialog>
+  <button type="button" id="bubbleTailHandle" class="bubble-tail-handle" title="เลื่อนปลายลูกศรช่องคำพูด" aria-label="เลื่อนปลายลูกศรช่องคำพูด" hidden></button>
+  <button type="button" id="curveHandle" class="bubble-tail-handle" title="ดัดเส้นหรือลูกศร" aria-label="ดัดเส้นหรือลูกศร" hidden></button>
+  <div id="colorPalette" class="color-palette" role="group" aria-label="จานสี" hidden><div id="paletteGrid" class="palette-grid"></div><div class="palette-recent"><span>ล่าสุด</span><div id="recentColors"></div></div><button id="customColor" class="custom-color"><i data-lucide="palette"></i>สีเพิ่มเติม</button></div>
+  <section id="shadowSettings" class="effect-popover" aria-label="ตั้งค่าเงา" hidden>
+    <label>สีเงา <button class="effect-swatch" data-effect-color="shadowColor" title="เลือกสีเงา" aria-label="เลือกสีเงา"></button><input id="shadowColor" type="color" value="#000000" hidden></label>
+    <label>ความฟุ้ง <input id="shadowBlur" type="range" min="0" max="32" value="6"><output data-effect-value="shadowBlur">6 px</output></label>
+    <label>แนวนอน <input id="shadowOffsetX" type="range" min="-32" max="32" value="3"><output data-effect-value="shadowOffsetX">3 px</output></label>
+    <label>แนวตั้ง <input id="shadowOffsetY" type="range" min="-32" max="32" value="3"><output data-effect-value="shadowOffsetY">3 px</output></label>
+  </section>
+  <section id="textSettings" class="effect-popover" aria-label="ตั้งค่าข้อความ" hidden>
+    <label>สีขอบอักษร <button class="effect-swatch" data-effect-color="outlineColor" title="เลือกสีขอบอักษร" aria-label="เลือกสีขอบอักษร"></button><input id="outlineColor" type="color" value="#000000" hidden></label>
+    <label>ความหนาขอบ <input id="outlineWidth" type="range" min="1" max="16" value="2"><output data-effect-value="outlineWidth">2 px</output></label>
+    <div id="bubbleEffects" hidden>
+      <label>สีช่องคำพูด <button class="effect-swatch" data-effect-color="bubbleFill" title="เลือกสีช่องคำพูด" aria-label="เลือกสีช่องคำพูด"></button><input id="bubbleFill" type="color" value="#ffffff" hidden></label>
+      <label>สีกรอบ <button class="effect-swatch" data-effect-color="bubbleBorder" title="เลือกสีกรอบช่องคำพูด" aria-label="เลือกสีกรอบช่องคำพูด"></button><input id="bubbleBorder" type="color" value="#ef3340" hidden></label>
+      <label>ความหนากรอบ <input id="bubbleBorderWidth" type="range" min="1" max="16" value="5"><output data-effect-value="bubbleBorderWidth">5 px</output></label>
+    </div>
+  </section>
+  <dialog class="editor-about-dialog" id="editorAboutDialog"><h2>SnapZy <small id="editorAboutVersion"></small></h2><p>ผู้พัฒนา: <b>jairlinethai</b></p><p>อัปเดต: <time datetime="2026-10-07">7 ตุลาคม 2026</time></p><details><summary>มีอะไรใหม่ใน 1.0.0</summary><ul><li>จัดชั้นวัตถุและภาพ ขึ้น–ลงทีละชั้น หรือบนสุด–ล่างสุด</li><li>ย้ายชั้นภาพพร้อมคำอธิบายที่ติดกับภาพ</li><li>รองรับ Undo/Redo และเก็บลำดับชั้นในไฟล์งาน</li></ul></details><button id="closeEditorAbout">ปิด</button></dialog>
+  <dialog class="editor-help-dialog" id="editorHelpDialog" aria-labelledby="editorHelpTitle"><header><h2 id="editorHelpTitle">วิธีใช้เครื่องมือ</h2><button id="closeEditorHelp" class="icon-button" title="ปิด" aria-label="ปิด" autofocus><i data-lucide="x"></i></button></header><div id="editorHelpContent" class="editor-help-content"></div></dialog>
+  <template id="editorHelpIcons">
+    <i data-help-icon="homeLink" data-lucide="house"></i>
+    <i data-help-icon="editorAbout" data-lucide="info"></i>
+    <i data-help-icon="languageToggle" data-lucide="languages"></i>
+    <i data-help-icon="paletteButton" data-lucide="palette"></i>
+    <i data-help-icon="sizeInput" data-lucide="ruler"></i>
+    <i data-help-icon="solid" data-lucide="list-minus"></i>
+    <i data-help-icon="opacityInput" data-lucide="blend"></i>
+    <i data-help-icon="shadowEnabled" data-lucide="moon"></i>
+    <i data-help-icon="outlineEnabled" data-lucide="type-outline"></i>
+    <i data-help-icon="actual" data-lucide="scan"></i>
+  </template>
+  <script src="vendor/lucide.js"></script><script src="i18n.js"></script><script src="editor-palette.js"></script><script src="editor-annotations.js"></script><script src="editor-effects-controls.js"></script><script src="editor-view.js"></script><script src="editor-project.js"></script><script src="editor-curves.js"></script><script src="editor.js"></script><script src="editor-layers.js"></script><script src="editor-project-controls.js"></script><script src="editor-help.js"></script>
+</body></html>

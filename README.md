@@ -4,6 +4,8 @@
 
 [English](#english) | [ภาษาไทย](#snapzy-สำหรับ-windows) | [Download / ดาวน์โหลด](https://github.com/jairlinethai8989/snapzy-releases/raw/refs/heads/main/downloads/Snapzy-Setup-1.0.0.exe)
 
+**Open source:** [SnapZy source code (MIT)](source/snapzy/README.md). The license covers the application source; brand artwork and release media remain separately reserved.
+
 ## English
 
 **Capture what matters. Share it clearly.**
@@ -239,6 +241,10 @@ SnapZy ประมวลผลภาพหน้าจอและวิดี�
 การจับภาพยาวขึ้นอยู่กับโปรแกรมเป้าหมาย ไม่รับประกันการเลื่อนอัตโนมัติในทุกแผ่นงาน โปรแกรมอ่าน PDF หรือรูปแบบหน้าจอ การวางคลิปขึ้นอยู่กับแอปปลายทาง หากวางไม่ได้สามารถลองลากไฟล์แทน SnapZy ไม่ส่งข้อความเข้าห้องแชทอัตโนมัติ
 
 **ไฟล์งานยังเก็บภาพต้นฉบับ รวมถึงข้อมูลที่เบลอ ปิดทับ หรือครอบตัดไว้ หากต้องปกปิดข้อมูลควรแชร์ PNG ที่ส่งออกแล้วแทนไฟล์งาน**
+
+## ซอร์สโค้ด
+
+[ซอร์สโค้ด SnapZy ภายใต้ MIT](source/snapzy/README.md) มีวิธี build และประกาศลิขสิทธิ์ของไลบรารีที่ใช้ ใบอนุญาต MIT ครอบคลุมซอร์สโปรแกรม ส่วนโลโก้ ภาพโปสเตอร์ QR สนับสนุน และสื่อประกอบยังสงวนสิทธิ์แยกต่างหาก
 
 ## App Icon / ไอคอนโปรแกรม
 

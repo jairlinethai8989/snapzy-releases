@@ -1,0 +1,8 @@
+<Project>
+  <PropertyGroup>
+    <BundledRuntimeVersion>10.0.12</BundledRuntimeVersion>
+    <DefaultSelfContained Condition="'$(DefaultSelfContained)' == ''">false</DefaultSelfContained>
+    <SelfContained Condition="'$(SelfContained)' == ''">$(DefaultSelfContained)</SelfContained>
+    <PublishTrimmed>false</PublishTrimmed>
+  </PropertyGroup>
+</Project>

@@ -1,0 +1,54 @@
+@font-face { font-family: SnapThai; src: url('vendor/thai.ttf'); font-display: swap; }
+:root { font-family: SnapThai, 'Segoe UI', sans-serif; color: #17231f; background: #fff; }
+* { box-sizing: border-box; }
+body { margin: 0; overflow: hidden; }
+header { height: 40px; display: flex; align-items: center; gap: 6px; padding: 0 10px; border-bottom: 1px solid #e2e9e6; }
+header img { width: 22px; height: 22px; }
+.identity { display: flex; flex-direction: column; line-height: 1.1; }
+.identity strong { font-size: 15px; }
+.identity small { font: 10px 'Segoe UI', sans-serif; color: #74847e; margin-top: 3px; }
+.state { margin-left: auto; min-width: 0; font-size: 10px; color: #537165; white-space: nowrap; max-width: 110px; overflow: hidden; text-overflow: ellipsis; }
+.state.error { color: #cc4652; }
+.language-toggle { flex: 0 0 28px; width: 28px; height: 25px; padding: 0; border: 1px solid #d7e2dc; border-radius: 4px; background: #fff; color: #17231f; cursor: pointer; font: 600 10px 'Segoe UI', sans-serif; }
+.language-toggle:hover { background: #e2f8ef; }.language-toggle:focus-visible { outline: 2px solid #16856a; outline-offset: 2px; }
+main { padding: 10px; }
+.actions { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; }
+.actions button { height: 52px; min-width: 0; background: #fff; border: 1px solid #d7e2dc; border-radius: 6px; color: #17231f; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; cursor: pointer; font: 11px SnapThai, sans-serif; }
+.actions button:hover, .actions button:focus-visible { background: #e9faf2; border-color: #67d4a6; outline: none; }
+.actions button:active { transform: translateY(1px); }
+.actions button.active { background: #e2f8ef; border-color: #16856a; box-shadow: inset 0 0 0 1px #16856a; color: #126c53; }
+.actions button.active:disabled { opacity: 1; }
+.actions button.working { border-color: #155eef; background: #edf4ff; color: #155eef; }
+.identity strong { white-space: nowrap; }
+.identity strong small { display: inline; font-size: 10px; font-weight: 500; }
+.about-button { flex: 0 0 25px; height: 25px; padding: 3px; border: 0; border-radius: 4px; background: transparent; color: #537165; cursor: pointer; }
+.about-button:hover { background: #e2f8ef; }.about-button svg { width: 18px; height: 18px; }
+.launcher-dialog { width: min(360px, calc(100vw - 24px)); max-height: calc(100vh - 16px); padding: 14px; border: 1px solid #d7e2dc; border-radius: 8px; color: #17231f; font: 12px SnapThai, sans-serif; }
+.launcher-dialog::backdrop { background: #17231f70; }
+.launcher-dialog h2 { margin: 0 0 10px; font-size: 15px; }
+.launcher-dialog h2 small { font: 11px 'Segoe UI', sans-serif; color: #74847e; }
+.launcher-dialog p { margin: 12px 0; }.launcher-dialog label { display: flex; align-items: center; gap: 8px; min-height: 26px; }
+.launcher-dialog input { accent-color: #126c53; }.dialog-actions { display: flex; justify-content: flex-end; gap: 6px; margin-top: 12px; }
+.dialog-actions button { min-height: 30px; padding: 0 8px; border: 1px solid #d7e2dc; border-radius: 4px; background: #fff; color: #17231f; cursor: pointer; font: 11px SnapThai, sans-serif; }
+.dialog-actions .primary { background: #126c53; color: #fff; border-color: #126c53; }
+.launcher-dialog>button { min-height: 30px; padding: 0 8px; border: 1px solid #d7e2dc; border-radius: 4px; background: #fff; font: 11px SnapThai,sans-serif; cursor: pointer; }
+.actions button:disabled { opacity: .45; cursor: default; }
+.actions svg { width: 21px; height: 21px; stroke-width: 1.8; }
+.actions .record svg { color: #e94c61; }
+.video-menu { position: absolute; right: 10px; top: 88px; z-index: 2; background: #fff; border: 1px solid #d7e2dc; box-shadow: 0 8px 24px #17231f20; padding: 5px; min-width: 155px; }
+.video-menu[hidden] { display: none; }
+.video-menu button { display: flex; align-items: center; gap: 8px; width: 100%; height: 32px; border: 0; background: #fff; text-align: left; font: 11px SnapThai, sans-serif; cursor: pointer; }
+.video-menu button:hover { background: #e9faf2; }
+.video-menu svg { width: 15px; height: 15px; }
+.options { display: flex; gap: 10px; margin-top: 8px; }
+.options label { display: flex; align-items: center; gap: 6px; min-width: 0; flex: 1; font-size: 11px; color: #53645d; }
+.options svg { width: 14px; height: 14px; }
+select { flex: 1; min-width: 0; height: 27px; border: 1px solid #d7e2dc; border-radius: 5px; padding: 2px 6px; font: 11px SnapThai, sans-serif; background: #f8fbf9; color: #17231f; }
+#delay[data-delayed="true"] { border-color: #155eef; background: #edf4ff; color: #155eef; font-weight: 600; }
+.recording-bar { position: absolute; inset: 40px 0 0; padding: 12px; background: #fff; display: flex; align-items: center; gap: 9px; }
+.recording-bar[hidden] { display: none; }
+.recording-bar strong { font: 16px 'Segoe UI', sans-serif; margin-right: auto; }
+.recording-bar button { border: 1px solid #d7e2dc; border-radius: 5px; height: 34px; display: flex; align-items: center; gap: 5px; padding: 0 10px; background: #fff; color: #17231f; cursor: pointer; font: 11px SnapThai, sans-serif; }
+.recording-bar button:hover { background: #f0f6f2; }
+.recording-bar button svg { width: 14px; height: 14px; }
+.pulse { width: 8px; height: 8px; border-radius: 50%; background: #e94c61; box-shadow: 0 0 0 4px #fbe1e4; }

@@ -1,0 +1,8 @@
+<Project>
+  <Target Name="SelectBundledDesktopRuntime" BeforeTargets="ProcessFrameworkReferences">
+    <ItemGroup>
+      <FrameworkReference Update="Microsoft.NETCore.App;Microsoft.WindowsDesktop.App;Microsoft.WindowsDesktop.App.WPF;Microsoft.WindowsDesktop.App.WindowsForms"
+                          RuntimeFrameworkVersion="$(BundledRuntimeVersion)" />
+    </ItemGroup>
+  </Target>
+</Project>

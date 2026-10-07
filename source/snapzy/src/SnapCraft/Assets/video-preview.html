@@ -1,0 +1,12 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>SnapZy | วิดีโอ</title><link rel="stylesheet" href="app.css"><link rel="stylesheet" href="video-preview.css"></head>
+<body class="clip-page">
+  <header class="clip-header"><div class="brand-link"><img src="icons/snapzy-32.png" alt=""><b>SnapZy</b></div><span id="clipInfo">วิดีโอ</span></header>
+  <main class="clip-player"><video id="clipVideo" controls playsinline preload="metadata"></video><p id="playbackError" role="alert" hidden></p></main>
+  <footer class="clip-footer"><div class="clip-actions">
+    <button id="dragClip" title="ลากคลิปไปยังแอปอื่น" aria-label="ลากคลิปไปยังแอปอื่น" disabled><i data-lucide="grip-vertical"></i></button>
+    <button id="copyClip" title="คัดลอกคลิป" aria-pressed="false" aria-busy="false" disabled><i data-lucide="copy"></i>คัดลอกคลิป</button>
+    <button id="saveClip" class="clip-save" title="บันทึก MP4" aria-busy="false" disabled><i data-lucide="download"></i>บันทึก MP4</button>
+  </div><p id="clipStatus" role="status">กำลังเตรียมคลิป…</p></footer>
+  <script src="vendor/lucide.js"></script><script src="i18n.js"></script><script src="video-preview.js"></script>
+</body></html>
