@@ -2,12 +2,14 @@
   // Keep the guide separate from drawing logic; entries follow the toolbar order.
   const groups = [
     ['Files and Output', 'ไฟล์และการส่งออก', [
+      ['workToolsButton', 'Work tools', 'เครื่องมือทำงาน', 'Review scrolling joins, create PDF/Word reports, permanently cover private regions in a new image, recover local history, and compare two images.', 'ตรวจรอยต่อภาพยาว สร้างรายงาน PDF/Word ปิดข้อมูลในภาพใหม่ กู้คืนประวัติในเครื่อง และเปรียบเทียบสองภาพ'],
       ['homeLink', 'Home', 'หน้าหลัก', 'Return to the capture menu without closing this image.', 'กลับไปเมนูจับภาพโดยไม่ปิดภาพนี้'],
       ['editorAbout', 'About', 'เกี่ยวกับโปรแกรม', 'Show the version, developer and update details.', 'ดูเวอร์ชัน ผู้พัฒนา และรายการอัปเดต'],
       ['languageToggle', 'EN / TH', 'EN / TH', 'Click to switch between English and Thai.', 'กดเพื่อสลับภาษาอังกฤษและไทย'],
       ['editorHelpButton', 'Help', 'วิธีใช้', 'Show this guide. Close with the X button or Esc.', 'เปิดคู่มือนี้ ปิดด้วยปุ่ม X หรือ Esc'],
       ['combineButton addCaptureTabs', 'Combine tabs', 'รวมภาพจากแท็บ', 'Choose captured tabs and arrange them vertically or horizontally.', 'เลือกภาพจากแท็บแล้วจัดเรียงแนวตั้งหรือแนวนอน'],
       ['addImagesButton chooseImageFiles pasteImageButton', 'Add images', 'เพิ่มภาพ', 'Add files, paste from the clipboard or use captured tabs on the same canvas.', 'เพิ่มไฟล์ภาพ ภาพจากคลิปบอร์ด หรือแท็บที่จับไว้ลงในพื้นที่งานเดียวกัน'],
+      ['ocrButton', 'Scan Text', 'อ่านข้อความ OCR', 'Open local OCR to review and copy text or table data. Read the selected region, or the whole image when nothing is selected, without cropping the image.', 'เปิด OCR ในเครื่องเพื่ออ่าน ตรวจสอบ และคัดลอกข้อความหรือตาราง อ่านเฉพาะพื้นที่ที่เลือก หรือทั้งภาพเมื่อไม่ได้เลือก โดยไม่ตัดภาพต้นฉบับ'],
       ['openProjectButton', 'Open project', 'เปิดงาน', 'Open a .neosnap project to continue editing its images and objects.', 'เปิดไฟล์ .neosnap เพื่อแก้ไขภาพและวัตถุต่อ'],
       ['saveProjectButton confirmProjectSave', 'Save project', 'บันทึกงาน', 'Save an editable .neosnap file. It retains original images, including information under blur or covering shapes. Share a PNG instead when hiding sensitive data.', 'บันทึกไฟล์ .neosnap ที่แก้ไขต่อได้ ไฟล์ยังเก็บภาพต้นฉบับ รวมข้อมูลใต้บริเวณเบลอหรือปิดทับ หากปกปิดข้อมูลสำคัญให้ส่งเป็น PNG แทน'],
       ['copyButton', 'Copy image', 'คัดลอกภาพ', 'Copy the finished image to paste into a chat or another app.', 'คัดลอกภาพที่ตกแต่งแล้วไปวางในแชทหรือโปรแกรมอื่น'],

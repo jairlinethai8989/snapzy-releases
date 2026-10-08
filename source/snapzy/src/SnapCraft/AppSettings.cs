@@ -12,6 +12,9 @@ internal sealed class AppSettings
     public uint HotkeyModifiers { get; set; } = 6;
     public uint HotkeyKey { get; set; } = (uint)Keys.S;
     public Dictionary<string, ShortcutBinding>? Shortcuts { get; set; }
+    public bool HistoryEnabled { get; set; }
+    private int historyDays = 7;
+    public int HistoryDays { get => historyDays; set => historyDays = value is 1 or 7 or 30 ? value : 7; }
 
     public Dictionary<string, ShortcutBinding> GetShortcuts()
     {

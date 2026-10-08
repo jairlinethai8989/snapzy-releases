@@ -60,7 +60,7 @@ internal static class NativeInput
         return DwmGetWindowState(handle, 14, out var cloaked, sizeof(uint)) != 0 || cloaked == 0;
     }
 
-    public static bool IsWindowUnobstructed(IntPtr handle, Rectangle bounds)
+    public static bool IsWindowUnobstructed(IntPtr handle, Rectangle bounds, IntPtr excluded = default)
     {
         if (!IsCaptureTargetVisible(handle)) return false;
         var found = false;
@@ -68,6 +68,7 @@ internal static class NativeInput
         EnumWindows((window, _) =>
         {
             if (window == handle) { found = true; return false; }
+            if (window == excluded) return true;
             if (IsCaptureTargetVisible(window) && GetWindowRect(window, out var rectangle) &&
                 bounds.IntersectsWith(Rectangle.FromLTRB(rectangle.Left, rectangle.Top, rectangle.Right, rectangle.Bottom)))
             { covered = true; return false; }

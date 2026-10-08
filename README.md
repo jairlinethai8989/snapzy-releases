@@ -2,7 +2,7 @@
 
 # SnapZy for Windows
 
-[English](#english) | [ภาษาไทย](#snapzy-สำหรับ-windows) | [Download / ดาวน์โหลด](https://github.com/jairlinethai8989/snapzy-releases/raw/refs/heads/main/downloads/Snapzy-Setup-1.0.0.exe)
+[English](#english) | [ภาษาไทย](#snapzy-สำหรับ-windows) | [Download / ดาวน์โหลด](https://github.com/jairlinethai8989/snapzy-releases/raw/refs/heads/main/downloads/SnapZy-Setup-1.0.1.exe)
 
 **Open source:** [SnapZy source code (MIT)](source/snapzy/README.md). The license covers the application source; brand artwork and release media remain separately reserved.
 
@@ -14,11 +14,11 @@ SnapZy is a free Windows screen-capture tool for selected areas, windows, and lo
 
 ## Download
 
-**SnapZy 1.0.0 for Windows (64-bit), installer updated October 7, 2026**
+**SnapZy 1.0.1 for Windows (64-bit), released October 8, 2026**
 
-[Download the installer](https://github.com/jairlinethai8989/snapzy-releases/raw/refs/heads/main/downloads/Snapzy-Setup-1.0.0.exe) · [Release notes](releases/v1.0.0.md) · [Verify SHA-256](checksums/Snapzy-Setup-1.0.0.exe.sha256)
+[Download the installer](https://github.com/jairlinethai8989/snapzy-releases/raw/refs/heads/main/downloads/SnapZy-Setup-1.0.1.exe) · [Release notes](releases/v1.0.1.md) · [Verify SHA-256](checksums/SnapZy-Setup-1.0.1.exe.sha256)
 
-The installer is about 7.94 MB and does not bundle .NET. It reuses a compatible installed runtime, or asks permission to download and install the official Microsoft runtime when missing. The October 7 refresh fixes an incorrect missing-.NET error after successful installation. The existing download URL is retained.
+The installer is about 11.19 MB and does not bundle .NET. It reuses a compatible installed runtime, or asks permission to download and install the official Microsoft runtime when missing. OCR runs locally; optional Thai and English language-model files are downloaded only after the user agrees.
 
 The installer is not code-signed, so Windows SmartScreen may show a warning. Review the release notes and verify the checksum before installing. SnapZy uses a separate app identity and installation profile from the private Neo Snap build.
 
@@ -31,11 +31,12 @@ The installer is not code-signed, so Windows SmartScreen may show a warning. Rev
 5. **Audio selection:** record system audio, microphone audio, both, or no audio.
 6. **Preview before saving:** play the recorded clip, save it, copy the clip, or drag it into another application.
 7. **Open images for editing:** browse existing images or add an image from the clipboard.
-8. **Combine multiple images:** arrange them vertically, horizontally, or freely in one editable workspace.
-9. **Save work for later:** retain original images and editable objects in a `.neosnap` project file.
-10. **Original-quality output:** retain source pixels and export lossless PNG; Fit/100% changes the view, not the saved resolution.
-11. **Convenient access:** run in the system tray, optionally start with Windows, and configure hotkeys separately for each capture mode.
-12. **English and Thai:** switch with EN/TH and process captures locally without automatic screen-content uploads.
+8. **Local Thai/English OCR:** read the whole image or a selected region, then review and edit plain-text or tab-separated table output before copying. Thai words are kept together without artificial character spacing.
+9. **Combine multiple images:** arrange them vertically, horizontally, or freely in one editable workspace.
+10. **Save work for later:** retain original images and editable objects in a `.neosnap` project file.
+11. **Original-quality output:** retain source pixels and export lossless PNG; Fit/100% changes the view, not the saved resolution.
+12. **Convenient access:** run in the system tray, optionally start with Windows, and configure hotkeys separately for each capture mode.
+13. **English and Thai:** switch with EN/TH and process captures locally without automatic screen-content uploads.
 
 ### English Feature Poster
 
@@ -91,6 +92,7 @@ Color, size, and opacity can be adjusted immediately while working or after sele
 | Version / About | Show the app version, developer, update date, and a summary of changes. |
 | EN / TH | Switch the interface language. |
 | Help | Open descriptions of the editor controls. |
+| Scan Text / OCR | Read the whole image or selected region and review editable text/table output before copying. |
 | Combine images | Combine captures from open tabs/windows vertically, horizontally, or freely. |
 | Add images | Add files, clipboard images, or images from other capture tabs. |
 | Open project / Save project | Open or save a `.neosnap` project to continue editing later. |
@@ -102,7 +104,7 @@ Color, size, and opacity can be adjusted immediately while working or after sele
 
 SnapZy is free to use. If it is useful to you, you can support its continued development with PromptPay:
 
-<a href="assets/donate-promptpay.png"><img src="assets/donate-promptpay.png" width="240" alt="Optional PromptPay donation QR for SnapZy"></a>
+<a href="assets/donate-promptpay.png"><img src="assets/donate-promptpay.png" width="160" alt="Optional PromptPay donation QR for SnapZy"></a>
 
 Click the QR image to open its original size for scanning. Donations are optional.
 
@@ -117,7 +119,7 @@ The installer will check for required components and explain how to install anyt
 
 ## Privacy
 
-SnapZy processes captures and recordings locally. It does not upload screen contents. See the release notes and included privacy information for details about each release.
+SnapZy processes captures, recordings, and OCR locally. It does not upload screen contents. Optional OCR language models are downloaded only after consent; images are not sent with that request. See the release notes and included privacy information for details about each release.
 
 Scrolling capture depends on the target application; automatic scrolling is not guaranteed for every sheet, PDF reader, or layout. Clip paste support depends on the receiving app; dragging the clip file is an alternative. SnapZy never sends chat messages automatically.
 
@@ -133,11 +135,11 @@ SnapZy เป็นโปรแกรมจับภาพหน้าจอฟ�
 
 ## ดาวน์โหลด
 
-**SnapZy 1.0.0 สำหรับ Windows (64-bit), อัปเดตตัวติดตั้ง 7 ตุลาคม 2026**
+**SnapZy 1.0.1 สำหรับ Windows (64-bit), เผยแพร่ 8 ตุลาคม 2026**
 
-[ดาวน์โหลดตัวติดตั้ง](https://github.com/jairlinethai8989/snapzy-releases/raw/refs/heads/main/downloads/Snapzy-Setup-1.0.0.exe) · [บันทึกประจำรุ่น](releases/v1.0.0.md) · [ตรวจสอบ SHA-256](checksums/Snapzy-Setup-1.0.0.exe.sha256)
+[ดาวน์โหลดตัวติดตั้ง](https://github.com/jairlinethai8989/snapzy-releases/raw/refs/heads/main/downloads/SnapZy-Setup-1.0.1.exe) · [บันทึกประจำรุ่น](releases/v1.0.1.md) · [ตรวจสอบ SHA-256](checksums/SnapZy-Setup-1.0.1.exe.sha256)
 
-ตัวติดตั้งขนาดประมาณ 7.94 MB ไม่รวม .NET โดยใช้รุ่นที่รองรับซึ่งมีอยู่แล้ว หรือถามยืนยันก่อนดาวน์โหลดและติดตั้งจาก Microsoft หากยังไม่มี การปรับปรุงครั้งนี้แก้ปัญหาแจ้งว่าไม่พบ .NET ทั้งที่ติดตั้งสำเร็จแล้ว และยังใช้ลิงก์ดาวน์โหลดเดิม
+ตัวติดตั้งขนาดประมาณ 11.19 MB ไม่รวม .NET โดยใช้รุ่นที่รองรับซึ่งมีอยู่แล้ว หรือถามยืนยันก่อนดาวน์โหลดและติดตั้งจาก Microsoft หากยังไม่มี OCR ประมวลผลบนเครื่อง และจะดาวน์โหลดโมเดลภาษาไทยกับอังกฤษเมื่อผู้ใช้ยอมรับเท่านั้น
 
 ตัวติดตั้งยังไม่มีลายเซ็นดิจิทัล Windows SmartScreen จึงอาจแสดงคำเตือน โปรดอ่านบันทึกประจำรุ่นและตรวจสอบ checksum ก่อนติดตั้ง SnapZy ใช้ตัวตนและโปรไฟล์ติดตั้งแยกจาก Neo Snap รุ่น private ภายในบริษัท
 
@@ -150,11 +152,12 @@ SnapZy เป็นโปรแกรมจับภาพหน้าจอฟ�
 5. **เลือกเสียงในการบันทึก:** เสียงจากเครื่อง ไมโครโฟน ทั้งสองแหล่ง หรือบันทึกแบบไม่มีเสียง
 6. **พรีวิววิดีโอก่อนเก็บ:** เล่นตรวจสอบ บันทึกลงเครื่อง คัดลอกคลิป หรือลากไฟล์ไปยังโปรแกรมอื่น
 7. **เปิดภาพเดิมมาตกแต่ง:** เลือกภาพจากเครื่องหรือเพิ่มภาพจากคลิปบอร์ด
-8. **รวมหลายภาพในงานเดียว:** จัดเรียงแนวตั้ง แนวนอน หรือวางตำแหน่งอย่างอิสระ
-9. **บันทึกงานไว้แก้ไขต่อ:** เก็บภาพต้นฉบับและวัตถุที่แก้ไขได้ในไฟล์ `.neosnap`
-10. **ภาพคมชัดตามต้นฉบับ:** เก็บพิกเซลต้นฉบับและส่งออก PNG แบบไม่สูญเสียรายละเอียด การแสดงพอดี/100% ไม่เปลี่ยนความละเอียดไฟล์
-11. **เรียกใช้งานสะดวก:** พักใน System Tray เลือกเริ่มพร้อม Windows และตั้งคีย์ลัดแยกตามโหมดจับภาพได้
-12. **รองรับอังกฤษและไทย:** สลับด้วยปุ่ม EN/TH และประมวลผลภาพบนเครื่อง ไม่อัปโหลดภาพอัตโนมัติ
+8. **OCR ไทยและอังกฤษบนเครื่อง:** อ่านทั้งภาพหรือเฉพาะพื้นที่ ตรวจแก้ผลลัพธ์แบบข้อความหรือตารางคั่นด้วยแท็บก่อนคัดลอก และเก็บคำภาษาไทยต่อเนื่องโดยไม่แทรกช่องว่างระหว่างตัวอักษร
+9. **รวมหลายภาพในงานเดียว:** จัดเรียงแนวตั้ง แนวนอน หรือวางตำแหน่งอย่างอิสระ
+10. **บันทึกงานไว้แก้ไขต่อ:** เก็บภาพต้นฉบับและวัตถุที่แก้ไขได้ในไฟล์ `.neosnap`
+11. **ภาพคมชัดตามต้นฉบับ:** เก็บพิกเซลต้นฉบับและส่งออก PNG แบบไม่สูญเสียรายละเอียด การแสดงพอดี/100% ไม่เปลี่ยนความละเอียดไฟล์
+12. **เรียกใช้งานสะดวก:** พักใน System Tray เลือกเริ่มพร้อม Windows และตั้งคีย์ลัดแยกตามโหมดจับภาพได้
+13. **รองรับอังกฤษและไทย:** สลับด้วยปุ่ม EN/TH และประมวลผลภาพบนเครื่อง ไม่อัปโหลดภาพอัตโนมัติ
 
 ### โปสเตอร์ภาษาไทย
 
@@ -210,6 +213,7 @@ SnapZy เป็นโปรแกรมจับภาพหน้าจอฟ�
 | เวอร์ชัน / About | แสดงเวอร์ชัน ผู้พัฒนา วันที่อัปเดต และสรุปสิ่งที่เปลี่ยนแปลง |
 | EN / TH | สลับภาษาเมนู |
 | Help | ดูคำอธิบายเครื่องมือในหน้าแก้ไขภาพ |
+| อ่านข้อความ / OCR | อ่านทั้งภาพหรือพื้นที่ที่เลือก แล้วตรวจแก้ข้อความหรือตารางก่อนคัดลอก |
 | รวมภาพ | รวมภาพจากแท็บ/หน้าต่างที่เปิดอยู่ แบบแนวตั้ง แนวนอน หรือจัดวางอิสระ |
 | เพิ่มภาพ | เพิ่มภาพจากไฟล์ คลิปบอร์ด หรือแท็บภาพอื่น |
 | เปิดงาน / บันทึกงาน | เปิดหรือเก็บไฟล์ `.neosnap` เพื่อแก้ไขต่อ |
@@ -221,7 +225,7 @@ SnapZy เป็นโปรแกรมจับภาพหน้าจอฟ�
 
 SnapZy ใช้งานได้ฟรี หากโปรแกรมมีประโยชน์และต้องการสนับสนุนการพัฒนาต่อ สามารถสแกน PromptPay ได้ที่นี่:
 
-<a href="assets/donate-promptpay.png"><img src="assets/donate-promptpay.png" width="240" alt="QR สนับสนุน SnapZy ผ่าน PromptPay"></a>
+<a href="assets/donate-promptpay.png"><img src="assets/donate-promptpay.png" width="160" alt="QR สนับสนุน SnapZy ผ่าน PromptPay"></a>
 
 การสนับสนุนเป็นทางเลือก กดภาพ QR เพื่อเปิดขนาดต้นฉบับสำหรับสแกน
 
@@ -236,7 +240,7 @@ SnapZy ใช้งานได้ฟรี หากโปรแกรมมี
 
 ## ความเป็นส่วนตัว
 
-SnapZy ประมวลผลภาพหน้าจอและวิดีโอบนเครื่อง และไม่อัปโหลดเนื้อหาบนหน้าจอ โปรดดูรายละเอียดในบันทึกประจำรุ่นและข้อมูลความเป็นส่วนตัวที่แนบมากับแต่ละรุ่น
+SnapZy ประมวลผลภาพหน้าจอ วิดีโอ และ OCR บนเครื่อง และไม่อัปโหลดเนื้อหาบนหน้าจอ โมเดลภาษา OCR จะดาวน์โหลดเมื่อผู้ใช้ยอมรับเท่านั้น โดยไม่ส่งภาพไปกับคำขอดาวน์โหลด โปรดดูรายละเอียดในบันทึกประจำรุ่นและข้อมูลความเป็นส่วนตัวที่แนบมากับแต่ละรุ่น
 
 การจับภาพยาวขึ้นอยู่กับโปรแกรมเป้าหมาย ไม่รับประกันการเลื่อนอัตโนมัติในทุกแผ่นงาน โปรแกรมอ่าน PDF หรือรูปแบบหน้าจอ การวางคลิปขึ้นอยู่กับแอปปลายทาง หากวางไม่ได้สามารถลองลากไฟล์แทน SnapZy ไม่ส่งข้อความเข้าห้องแชทอัตโนมัติ
 

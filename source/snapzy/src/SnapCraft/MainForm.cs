@@ -5,7 +5,7 @@ using Microsoft.Web.WebView2.WinForms;
 
 namespace SnapCraft;
 
-internal sealed class MainForm : Form
+internal sealed partial class MainForm : Form
 {
     [DllImport("user32.dll")] private static extern bool SetWindowDisplayAffinity(IntPtr window, uint affinity);
     private readonly WebView2 web = new() { Dock = DockStyle.Fill };
@@ -63,23 +63,25 @@ internal sealed class MainForm : Form
         Controls.Add(web);
         Controls.Add(loading);
         loading.BringToFront();
+        CreateFastLauncher();
         Shown += async (_, _) =>
         {
             PerformanceTrace.Record("launcher.visible", startupClock.Elapsed.TotalMilliseconds);
-            await InitializeBrowserAsync();
+            await EnsureBrowserAsync();
         };
         recordingTimer.Tick += (_, _) =>
         {
             if (video?.FailureMessage is string failure)
             {
                 recordingTimer.Stop();
-                _ = StopVideoAsync(false, failure);
+                _ = StopVideoAsync(true, failure);
             }
             else if (video is not null)
             {
-                var elapsed = DateTime.Now - video.StartedAt;
-                Send(new { type = "elapsed", text = elapsed.ToString(@"hh\:mm\:ss") });
+                var elapsed = video.Elapsed;
+                Send(new { type = "elapsed", text = RecordingPolicy.ElapsedText(elapsed) });
                 recordingStatus?.UpdateElapsed(elapsed);
+                if (!checkingRecordingSpace && elapsed - lastSpaceCheck > TimeSpan.FromSeconds(2)) _ = CheckRecordingSpaceAsync(video);
             }
         };
         trayMenu.Items.Add(Localization.Translate("เปิด SnapZy"), null, (_, _) => ShowLauncher());
@@ -92,6 +94,12 @@ internal sealed class MainForm : Form
         trayMenu.Items.Add(startupMenuItem);
         trayMenu.Items.Add(Localization.Translate("หยุดและบันทึก MP4"), null, async (_, _) => await StopVideoAsync(true));
         trayMenu.Items.Add(Localization.Translate("ยกเลิกวิดีโอ"), null, async (_, _) => await StopVideoAsync(false));
+        trayMenu.Items.Add(Localization.CurrentLanguage == "th" ? "ประวัติและกู้คืนงาน" : "History and recovery", null, async (_, _) =>
+        {
+            using var history = new HistoryForm();
+            if (history.ShowDialog(this) == DialogResult.OK && history.SelectedPath is not null) OpenEditor(await CaptureHistory.RestoreAsync(history.SelectedPath));
+            RefreshHistorySettings();
+        });
         trayMenu.Items.Add(Localization.Translate("ออกจาก SnapZy"), null, (_, _) => { exitRequested = true; Close(); });
         tray.Icon = Icon;
         tray.Text = AppInfo.ProductName;
@@ -121,6 +129,8 @@ internal sealed class MainForm : Form
                 finally { exitInProgress = false; }
                 return;
             }
+            warmEditor?.Dispose();
+            warmEditor = null;
             tray.Visible = false;
             tray.Dispose();
         };
@@ -137,7 +147,7 @@ internal sealed class MainForm : Form
             if (IsDisposed) return;
             web.CoreWebView2.SetVirtualHostNameToFolderMapping("snapcraft.local", WebAssets.WebRoot, CoreWebView2HostResourceAccessKind.DenyCors);
             web.CoreWebView2.WebMessageReceived += async (_, args) => await HandleMessageAsync(args.WebMessageAsJson);
-            web.CoreWebView2.NavigationCompleted += (_, args) => { if (args.IsSuccess) loading.Hide(); };
+            web.CoreWebView2.NavigationCompleted += (_, args) => { if (args.IsSuccess) { loading.Hide(); fastLauncher.Hide(); } };
             web.Source = new Uri($"https://snapcraft.local/launcher.html?language={settings.Language}&product={Uri.EscapeDataString(AppInfo.ProductName)}");
             SetWindowDisplayAffinity(Handle, 0x11);
         }
@@ -161,8 +171,10 @@ internal sealed class MainForm : Form
                     PerformanceTrace.Record("launcher.ready", startupClock.Elapsed.TotalMilliseconds);
                     SendSettings();
                     _ = RefreshCpuAvailabilityAsync();
-                    _ = Task.Run(() => { try { WebAssets.CleanupCaptures(); } catch (IOException) { } catch (UnauthorizedAccessException) { } });
+                    var protectedCaptures = editors.SelectMany(editor => editor.SourcePaths).ToArray();
+                    _ = Task.Run(() => { try { WebAssets.CleanupCaptures(protectedCaptures); CaptureHistory.Cleanup(AppSettings.Load().HistoryDays); } catch (IOException) { } catch (UnauthorizedAccessException) { } });
                     CleanupVideoClips();
+                    _ = PrepareNextEditorAsync();
                     break;
                 case "hotkey":
                     var modifiers = root.GetProperty("modifiers").GetUInt32();
@@ -170,7 +182,7 @@ internal sealed class MainForm : Form
                     var mode = root.TryGetProperty("mode", out var modeValue) ? modeValue.GetString()! : "launcher";
                     var enabled = !root.TryGetProperty("enabled", out var enabledValue) || enabledValue.ValueKind == JsonValueKind.True;
                     var binding = new ShortcutBinding(modifiers, key, enabled);
-                    shortcuts!.UpdateAndSave(settings, mode, binding);
+                    RefreshHistorySettings(); shortcuts!.UpdateAndSave(settings, mode, binding);
                     SendSettings();
                     Send(new { type = "hotkeySaved", mode });
                     SetStatus("บันทึกคีย์ลัดแล้ว");
@@ -183,6 +195,7 @@ internal sealed class MainForm : Form
                         Math.Clamp(Top, workArea.Top, Math.Max(workArea.Top, workArea.Bottom - Height)));
                     break;
                 case "settings":
+                    RefreshHistorySettings();
                     settings.DelayMs = root.GetProperty("delayMs").GetInt32();
                     settings.OpenMode = root.GetProperty("openMode").GetString() == "tab" ? "tab" : "window";
                     settings.Save();
@@ -240,6 +253,7 @@ internal sealed class MainForm : Form
             if (path is not null)
             {
                 openedEditor = OpenEditor(path);
+                if (CaptureHistory.Enabled) _ = RetainCaptureHistoryAsync(path);
             }
             else SetStatus("ยกเลิกการจับภาพ");
         }
@@ -263,14 +277,15 @@ internal sealed class MainForm : Form
         EditorHubForm hub;
         if (settings.OpenMode == "tab")
         {
-            if (tabHub is null || tabHub.IsDisposed) tabHub = new EditorHubForm(ShowLauncher, () => editors.ToArray(), ChangeLanguage);
+            if (tabHub is null || tabHub.IsDisposed) tabHub = TakePreparedEditor();
             hub = tabHub;
         }
-        else hub = new EditorHubForm(ShowLauncher, () => editors.ToArray(), ChangeLanguage);
+        else hub = TakePreparedEditor();
         if (editors.Add(hub)) hub.FormClosed += (_, _) => editors.Remove(hub);
         hub.AddCapture(path);
         hub.Show();
         hub.Activate();
+        _ = PrepareNextEditorAsync();
         return hub;
     }
 
@@ -287,6 +302,7 @@ internal sealed class MainForm : Form
 
     private void ChangeLanguage(string language)
     {
+        RefreshHistorySettings();
         settings.Language = language;
         Localization.SetLanguage(language);
         settings.Save();
@@ -301,12 +317,13 @@ internal sealed class MainForm : Form
         Text = $"{AppInfo.ProductName} {AppInfo.Version}";
         loading.Text = Localization.Translate("กำลังเตรียม SnapZy…");
         tray.Text = AppInfo.ProductName;
-        if (trayMenu.Items.Count != 5) return;
+        if (trayMenu.Items.Count != 6) return;
         trayMenu.Items[0].Text = Localization.Translate("เปิด SnapZy");
         startupMenuItem.Text = Localization.Translate("เริ่มพร้อม Windows");
         trayMenu.Items[2].Text = Localization.Translate("หยุดและบันทึก MP4");
         trayMenu.Items[3].Text = Localization.Translate("ยกเลิกวิดีโอ");
-        trayMenu.Items[4].Text = Localization.Translate("ออกจาก SnapZy");
+        trayMenu.Items[4].Text = Localization.CurrentLanguage == "th" ? "ประวัติและกู้คืนงาน" : "History and recovery";
+        trayMenu.Items[5].Text = Localization.Translate("ออกจาก SnapZy");
     }
 
     private async Task RefreshCpuAvailabilityAsync()
@@ -353,6 +370,10 @@ internal sealed class MainForm : Form
         var temporaryPath = Path.Combine(WebAssets.DataRoot, "Recordings", $"{Guid.NewGuid():N}.mp4");
         try
         {
+            Directory.CreateDirectory(Path.GetDirectoryName(temporaryPath)!);
+            if (RecordingPolicy.MustStop(await Task.Run(() => RecordingPolicy.FreeBytes(temporaryPath))))
+                throw new IOException(Localization.CurrentLanguage == "th" ? "พื้นที่ดิสก์ไม่พอเริ่มบันทึก กรุณาเพิ่มพื้นที่ว่าง" : "Not enough free disk space to start recording.");
+            lastSpaceCheck = TimeSpan.Zero;
             if (window)
             {
                 Hide();
@@ -475,6 +496,7 @@ internal sealed class MainForm : Form
     {
         base.OnHandleCreated(e);
         shortcuts = new ShortcutManager(Handle, settings.GetShortcuts());
+        BeginInvoke(new Action(() => _ = EnsureBrowserAsync()));
     }
 
     protected override void OnHandleDestroyed(EventArgs e)
@@ -496,7 +518,12 @@ internal sealed class MainForm : Form
         if (action == "launcher") { ShowLauncher(); return; }
         if (video is not null) return;
         Send(new { type = "mode", value = action });
-        if (action == "video") { ShowLauncher(); Send(new { type = "videoPrompt" }); }
+        if (action == "video")
+        {
+            ShowLauncher();
+            if (web.CoreWebView2 is not null && !fastLauncher.Visible) Send(new { type = "videoPrompt" });
+            else { using var options = new VideoOptionsDialog(); if (options.ShowDialog(this) == DialogResult.OK) await StartVideoAsync(options.CaptureWindow, options.Audio); }
+        }
         else await CaptureAsync(action switch { "area" => CaptureKind.Area, "window" => CaptureKind.Window, _ => CaptureKind.Scroll });
     }
 

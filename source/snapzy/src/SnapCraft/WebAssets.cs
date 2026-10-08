@@ -34,13 +34,15 @@ internal static class WebAssets
         return copied;
     }
 
-    public static void CleanupCaptures()
+    public static void CleanupCaptures(IEnumerable<string>? protectedPaths = null)
     {
+        var protectedSet = new HashSet<string>(protectedPaths ?? Array.Empty<string>(), StringComparer.OrdinalIgnoreCase);
         foreach (var file in Directory.EnumerateFiles(Captures).Where(path => Path.GetExtension(path) is ".png" or ".neosnap"))
         {
-            if (File.GetLastWriteTimeUtc(file) < DateTime.UtcNow.AddDays(-2))
+            if (!protectedSet.Contains(file) && File.GetLastWriteTimeUtc(file) < DateTime.UtcNow.AddDays(-2))
             {
                 try { File.Delete(file); } catch (IOException) { } catch (UnauthorizedAccessException) { }
+                try { File.Delete(ScrollCaptureAudit.PathFor(file)); } catch (IOException) { } catch (UnauthorizedAccessException) { }
             }
         }
     }

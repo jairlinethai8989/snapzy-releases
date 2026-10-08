@@ -39,6 +39,7 @@ internal sealed partial class EditorHubForm : Form
             for (var index = 0; index < tabs.TabCount; index++) if (CloseBounds(index).Contains(e.Location)) { await ClosePageAsync(tabs.TabPages[index]); break; }
         };
         Controls.Add(tabs);
+        InitializeRecovery();
         Shown += OnFirstShown;
         FormClosing += async (_, e) =>
         {
@@ -50,11 +51,21 @@ internal sealed partial class EditorHubForm : Form
 
     public void AddCapture(string path)
     {
+        if (IsWarm && warmPage is not null)
+        {
+            var readyPage = warmPage;
+            warmPage = null;
+            readyPage.Text = $"ภาพ {++captureNumber}"; readyPage.Tag = path;
+            var readyView = readyPage.Controls.OfType<WebView2>().Single();
+            initializations[readyView] = LoadWarmCaptureAsync(readyView, path);
+            return;
+        }
         var page = new TabPage($"ภาพ {++captureNumber}") { Tag = path, BackColor = Color.White };
         var web = new WebView2 { Dock = DockStyle.Fill };
         page.Controls.Add(web);
         tabs.TabPages.Add(page);
         tabs.SelectedTab = page;
+        _ = ShowNativePreviewAsync(page, path);
         if (Visible) StartEditorInitialization(web, path);
     }
 
@@ -65,7 +76,7 @@ internal sealed partial class EditorHubForm : Form
         Shown -= OnFirstShown;
         foreach (TabPage page in tabs.TabPages)
         {
-            if (page.Controls[0] is WebView2 web && web.CoreWebView2 is null)
+            if (page.Controls.OfType<WebView2>().Single() is WebView2 web && web.CoreWebView2 is null)
                 StartEditorInitialization(web, (string)page.Tag!);
         }
     }
@@ -92,9 +103,12 @@ internal sealed partial class EditorHubForm : Form
                     ? message.RootElement.GetString()
                     : message.RootElement.GetProperty("action").GetString();
                 var page = tabs.TabPages.Cast<TabPage>().FirstOrDefault(page => page.Controls.Contains(web));
-                if (action == "editorReady") PerformanceTrace.Record("editor.ready", readyClock.Elapsed.TotalMilliseconds);
+                if (action == "editorReady") { renderedViews.Add(web); PerformanceTrace.Record("editor.ready", readyClock.Elapsed.TotalMilliseconds); warmReady?.TrySetResult(); RemoveNativePreview(page); }
+                if (action == "editorPrepared") warmReady?.TrySetResult();
                 if (action == "language") changeLanguage?.Invoke(message.RootElement.GetProperty("language").GetString() ?? ProductProfile.Current.DefaultLanguage);
                 if (action == "showLauncher") showLauncher();
+                if (action == "productivity") BeginInvoke(new Action(() => ShowProductivityMenu(web)));
+                if (action == "ocr") await RunProductivityAsync("ocr", web);
                 if (action == "closeEditorTab" && page is not null) await ClosePageAsync(page);
                 if (action == "saveImage" && page is not null) await SavePageAsync(page);
                 if (action == "saveProject" && page is not null) await SaveProjectAsync(page);
@@ -113,15 +127,15 @@ internal sealed partial class EditorHubForm : Form
                 using var dialog = new SaveFileDialog
                 {
                     Filter = "PNG image (*.png)|*.png",
-                    FileName = $"snapzy-{DateTime.Now:yyyyMMdd-HHmmss}.png",
+                    FileName = $"neo-snap-{DateTime.Now:yyyyMMdd-HHmmss}.png",
                     AddExtension = true
                 };
                 if (dialog.ShowDialog(this) == DialogResult.OK) args.ResultFilePath = dialog.FileName;
                 else args.Cancel = true;
                 args.Handled = true;
             };
-            var parameter = Path.GetExtension(path).Equals(".neosnap", StringComparison.OrdinalIgnoreCase) ? "project" : "image";
-            web.Source = new Uri($"https://snapcraft.local/editor.html?{parameter}={Uri.EscapeDataString(WebAssets.CaptureUrl(path))}&version={AppInfo.Version}&language={AppSettings.Load().Language}&product={Uri.EscapeDataString(AppInfo.ProductName)}");
+            var parameter = path.Length == 0 ? "warm=1" : (Path.GetExtension(path).Equals(".neosnap", StringComparison.OrdinalIgnoreCase) ? "project=" : "image=") + Uri.EscapeDataString(WebAssets.CaptureUrl(path));
+            web.Source = new Uri($"https://snapcraft.local/editor.html?{parameter}&version={AppInfo.Version}&language={AppSettings.Load().Language}&product={Uri.EscapeDataString(AppInfo.ProductName)}");
         }
         catch (Exception error)
         {
@@ -154,6 +168,8 @@ internal sealed partial class EditorHubForm : Form
         var web = page.Controls.OfType<WebView2>().Single();
         if (initializations.TryGetValue(web, out var initialization)) await initialization;
         initializations.Remove(web);
+        historyIds.Remove(web); lastRecoveryState.Remove(web);
+        renderedViews.Remove(web);
         var path = page.Tag as string;
         tabs.TabPages.Remove(page);
         page.Dispose();
@@ -273,7 +289,7 @@ internal sealed partial class EditorHubForm : Form
 
     internal static async Task WritePngAsync(string path, byte[] bytes)
     {
-        var temporary = Path.Combine(Path.GetDirectoryName(Path.GetFullPath(path))!, $".snapzy-{Guid.NewGuid():N}.tmp");
+        var temporary = Path.Combine(Path.GetDirectoryName(Path.GetFullPath(path))!, $".neo-snap-{Guid.NewGuid():N}.tmp");
         try
         {
             await File.WriteAllBytesAsync(temporary, bytes);
@@ -297,7 +313,7 @@ internal sealed partial class EditorHubForm : Form
 
     protected override void Dispose(bool disposing)
     {
-        if (disposing) closeIcon.Dispose();
+        if (disposing) { recoveryTimer.Stop(); recoveryTimer.Dispose(); closeIcon.Dispose(); }
         base.Dispose(disposing);
     }
 }

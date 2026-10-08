@@ -79,7 +79,7 @@ document.querySelector('#confirmProjectSave').onclick=()=>runProjectCommand(asyn
   document.querySelector('#projectSaveDialog').close();
   if(window.chrome?.webview) {projectMessage('saveProject');return;}
   const exported=exportProject(),url=URL.createObjectURL(new Blob([JSON.stringify(exported.project)],{type:'application/json'}));
-  const a=document.createElement('a');a.href=url;a.download=`snapzy-${Date.now()}.neosnap`;a.click();setTimeout(()=>URL.revokeObjectURL(url),60000);
+  const a=document.createElement('a');a.href=url;a.download=`neo-snap-${Date.now()}.neosnap`;a.click();setTimeout(()=>URL.revokeObjectURL(url),60000);
   // A browser download cannot confirm that the destination was written successfully.
 });
 

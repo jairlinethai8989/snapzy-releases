@@ -55,6 +55,13 @@ internal sealed class CaptureCoordinator
         var useAutomation = false;
         var started = DateTime.UtcNow;
         var lastAdded = started;
+        var audit = new ScrollCaptureAudit();
+        var targetBounds = NativeInput.WindowBounds(selection.WindowHandle);
+        void CheckTarget()
+        {
+            if (NativeInput.WindowBounds(selection.WindowHandle) != targetBounds || !targetBounds.Contains(selection.Region) || !NativeInput.IsWindowUnobstructed(selection.WindowHandle, selection.Region, progress.Handle))
+                throw new InvalidOperationException(Localization.CurrentLanguage == "th" ? "หน้าต่างเป้าหมายถูกบังหรือย้ายตำแหน่ง กรุณานำขึ้นด้านหน้าแล้วจับภาพยาวใหม่ โปรแกรมหยุดเพื่อไม่ให้จับหรือเลื่อนหน้าต่างอื่น" : "The scrolling target is covered or has moved. Bring it to the front and capture again. Capture stopped to avoid recording or scrolling another window.");
+        }
         try
         {
             var attempt = 0;
@@ -62,11 +69,13 @@ internal sealed class CaptureCoordinator
             {
                 if (progress.CancelRequested) return null;
                 if (finish || progress.FinishRequested) break;
+                CheckTarget();
                 if (attempt > 0)
                 {
                     if (!progress.Manual)
                     {
                         NativeInput.FocusWindow(selection.WindowHandle);
+                        CheckTarget();
                         var moved = false;
                         if (useAutomation)
                         {
@@ -81,11 +90,14 @@ internal sealed class CaptureCoordinator
                     }
                     await Task.Delay(progress.Manual ? 550 : 350);
                 }
-                using var tile = await CaptureVisibleRegionAsync(selection.Region);
+                using var tile = await CaptureStableScrollTileAsync(selection.Region, audit, CheckTarget);
+                if (tile is null) { progress.SetManual(true); progress.UpdateProgress(stitcher.Count, stitcher.TotalHeight, "ภาพยังไม่นิ่ง: รอแล้วเลื่อนเอง หรือ Esc เพื่อจบ"); if (DateTime.UtcNow - started > TimeSpan.FromMinutes(7) || DateTime.UtcNow - lastAdded > TimeSpan.FromSeconds(30)) break; attempt++; continue; }
+                var previousHeight = stitcher.TotalHeight;
                 var result = await Task.Run(() => stitcher.Add(tile));
                 observed?.Invoke(tile, stitcher.Count, result, stitcher.TotalHeight);
                 if (result == TileResult.Added)
                 {
+                    if (stitcher.Count > 1) audit.Joins.Add(previousHeight);
                     lastAdded = DateTime.UtcNow;
                     unchanged = 0;
                     ambiguous = 0;
@@ -105,6 +117,7 @@ internal sealed class CaptureCoordinator
                 }
                 else if (result == TileResult.Ambiguous)
                 {
+                    audit.RejectedFrames++;
                     ambiguous++;
                     if (ambiguous >= 2 && !progress.Manual)
                     {
@@ -112,19 +125,55 @@ internal sealed class CaptureCoordinator
                         progress.SetManual(true);
                     }
                 }
-                else break;
-                if (!progress.Manual && DateTime.UtcNow - started > TimeSpan.FromMinutes(2)) break;
-                if (progress.Manual && DateTime.UtcNow - started > TimeSpan.FromMinutes(7)) break;
+                else { audit.ReachedLimit = true; break; }
+                if (!progress.Manual && DateTime.UtcNow - started > TimeSpan.FromMinutes(2)) { audit.ReachedLimit = true; break; }
+                if (progress.Manual && DateTime.UtcNow - started > TimeSpan.FromMinutes(7)) { audit.ReachedLimit = true; break; }
                 if (progress.Manual && DateTime.UtcNow - lastAdded > TimeSpan.FromSeconds(30)) break;
                 attempt++;
             }
             if (progress.CancelRequested || stitcher.Count == 0) return null;
+            audit.ReachedLimit |= stitcher.Count >= 80;
             var output = WebAssets.NewCapturePath();
             await Task.Run(() => stitcher.Save(output));
+            audit.Joins = audit.Joins.Select(y => y - stitcher.FooterHeight).ToList();
+            await audit.SaveAsync(output);
             return output;
         }
         finally { progress.Close(); }
     }
 
     private Task<Bitmap> CaptureVisibleRegionAsync(Rectangle region) => backend.CaptureRegionAsync(region);
+
+    private async Task<Bitmap?> CaptureStableScrollTileAsync(Rectangle region, ScrollCaptureAudit audit, Action checkTarget)
+    {
+        checkTarget();
+        var previous = await CaptureVisibleRegionAsync(region);
+        try
+        {
+            for (var attempt = 0; attempt < 4; attempt++)
+            {
+                await Task.Delay(70);
+                checkTarget();
+                var current = await CaptureVisibleRegionAsync(region);
+                var stable = await Task.Run(() => StableSamples(previous, current));
+                previous.Dispose(); previous = current;
+                if (stable) { checkTarget(); var ready = previous; previous = null!; return ready; }
+            }
+            audit.UnstableFrames++; return null;
+        }
+        finally { previous?.Dispose(); }
+    }
+
+    internal static bool StableSamples(Bitmap first, Bitmap second)
+    {
+        if (first.Size != second.Size) return false;
+        var changed = 0; var count = 0;
+        for (var y = 0; y < first.Height; y += Math.Max(1, first.Height / 100))
+            for (var x = 0; x < first.Width; x += Math.Max(1, first.Width / 100))
+            {
+                var a = first.GetPixel(x, y); var b = second.GetPixel(x, y); count++;
+                if (Math.Abs(a.R - b.R) + Math.Abs(a.G - b.G) + Math.Abs(a.B - b.B) > 45) changed++;
+            }
+        return changed < count * .003;
+    }
 }

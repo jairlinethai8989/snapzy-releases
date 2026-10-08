@@ -2,6 +2,8 @@
 
 SnapZy is a Windows screen capture and image editing application. This folder contains the SnapZy-only application source and the scripts used to build its Windows installer. It does not contain Neo Snap product configuration or internal company documents.
 
+Version 1.0.1 adds local Thai/English OCR from a whole image or selected region, editable text or tab-separated table output, and corrected Thai character spacing. English can use Windows OCR. Thai + English uses optional verified Tesseract model files downloaded only after user consent; captured images are not uploaded.
+
 ## Build
 
 Requirements: Windows 10 version 2004 or newer, Windows 11, .NET 10 SDK (x64), Microsoft Edge WebView2 Runtime, and Microsoft Visual C++ 2015-2022 Redistributable (x64).

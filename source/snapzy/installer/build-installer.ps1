@@ -81,6 +81,9 @@ if ($PublishOnly) { Write-Output "Published framework-dependent payload: $publis
 
 $archive = Join-Path $staging 'payload.zip'
 Compress-Archive -Path (Join-Path $publish '*') -DestinationPath $archive -Force
+$checkedStage=Expand-ManagedPayload $archive
+try { Read-ManagedPayloadManifest $checkedStage -Validate | Out-Null }
+finally { Remove-ManagedStagingDirectory $checkedStage }
 Copy-Item (Join-Path $PSScriptRoot 'install.ps1') -Destination $staging -Force
 Copy-Item (Join-Path $PSScriptRoot 'setup-options.ps1') -Destination $staging -Force
 Copy-Item (Join-Path $PSScriptRoot 'upgrade-policy.ps1') -Destination $staging -Force

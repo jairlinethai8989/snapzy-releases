@@ -39,10 +39,7 @@ try {
         if ($answer -ne 'Retry') { exit 0 }
     }
     $initialLanguage = $product.Language
-    try {
-        $savedLanguage = (Get-Content -LiteralPath $settingsFile -Raw | ConvertFrom-Json).Language
-        if ($savedLanguage -in @('en','th')) { $initialLanguage = $savedLanguage }
-    } catch { }
+    # Setup itself always opens in English for SnapZy; the installed app keeps its own saved language.
     $options = New-SetupOptionsForm $product $initialLanguage
     if ($action -ne 'Install') {
         $startup = Get-ItemProperty -Path $runKey -ErrorAction SilentlyContinue

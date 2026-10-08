@@ -46,7 +46,7 @@ internal static class Localization
         ["หน้าต่างเป้าหมายถูกย่อหรือไม่มีพื้นที่ที่มองเห็น"] = "The target window is minimized or has no visible area.", ["เปิด FFmpeg ไม่ได้"] = "Could not launch FFmpeg", ["ยังไม่ได้เริ่มอัด CPU"] = "CPU recording has not started.",
         ["บันทึกเสียงไม่ได้"] = "Could not record audio", ["ปิดไฟล์ MP4 ไม่สำเร็จ"] = "Could not finalize MP4", ["รวมเสียง MP4 ไม่สำเร็จ"] = "Could not mux MP4 audio", ["ไม่รู้จักโหมดคีย์ลัด"] = "Unknown shortcut mode.",
         ["เลือก Ctrl หรือ Alt ร่วมกับ PrtSc ตัวอักษร ตัวเลข หรือ F1–F11"] = "Choose Ctrl or Alt with PrtSc, a letter, a number, or F1–F11.", ["คีย์ลัดนี้ถูกใช้งานหรือ Windows ไม่อนุญาต กรุณาเลือกชุดอื่น"] = "This shortcut is in use or blocked by Windows. Choose another combination.",
-        ["จับภาพ"] = "Capture", ["พื้นที่"] = "Area", ["แก้ไขภาพ"] = "Image editor", ["เกี่ยวกับ SnapZy"] = "About SnapZy", ["มีอะไรใหม่ใน 1.0.0"] = "What's new in 1.0.0",
+        ["จับภาพ"] = "Capture", ["พื้นที่"] = "Area", ["แก้ไขภาพ"] = "Image editor", ["เกี่ยวกับ SnapZy"] = "About SnapZy", ["มีอะไรใหม่ใน 1.0.1"] = "What's new in 1.0.1",
         ["SnapZy | เลือกภาพเพื่อแก้ไข"] = "SnapZy | Choose images to edit", ["เปิดหน้าตา SnapZy ไม่ได้"] = "Could not open the SnapZy interface",
         ["ภาพใหญ่เกินไป"] = "Image is too large", ["กรุณาแบ่งเป็นหลายภาพ"] = "Please split it into multiple images."
     };

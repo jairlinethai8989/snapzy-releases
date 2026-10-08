@@ -14,7 +14,7 @@ function bindColorPalette(onPick) {
     '#20252c','#163a91','#00435c','#003b36','#084109','#424900','#756100','#663300','#6e1020','#600b3d','#350763'
   ];
   let saved = [];
-  try { saved = JSON.parse(localStorage.getItem('snapzy-recent-colors') || '[]'); } catch {}
+  try { saved = JSON.parse(localStorage.getItem('neo-snap-recent-colors') || '[]'); } catch {}
   if (!Array.isArray(saved)) saved = [];
   saved = saved.filter((color) => /^#[0-9a-f]{6}$/i.test(color)).slice(0, 11);
   const close = () => { popover.hidden = true; button.setAttribute('aria-expanded', 'false'); };
@@ -27,7 +27,7 @@ function bindColorPalette(onPick) {
   };
   function remember(color) {
     saved = [color, ...saved.filter((entry) => entry !== color)].slice(0, 11);
-    try { localStorage.setItem('snapzy-recent-colors', JSON.stringify(saved)); } catch {}
+    try { localStorage.setItem('neo-snap-recent-colors', JSON.stringify(saved)); } catch {}
     recent.replaceChildren(...saved.map(makeSwatch)); update();
   }
   function update() {

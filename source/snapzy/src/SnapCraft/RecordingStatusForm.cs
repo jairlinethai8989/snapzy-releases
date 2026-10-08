@@ -65,7 +65,7 @@ internal sealed class RecordingStatusForm : Form
         Invalidate();
     }
 
-    public void UpdateElapsed(TimeSpan elapsed) => status.Text = $@"REC  {elapsed:hh\:mm\:ss}";
+    public void UpdateElapsed(TimeSpan elapsed) => status.Text = "REC  " + RecordingPolicy.ElapsedText(elapsed);
     public void Finalizing() { stop.Enabled = false; cancel.Enabled = false; status.Text = "กำลังบันทึก…"; }
     public void Dismiss() { closing = true; Close(); }
     protected override void OnPaint(PaintEventArgs e)

@@ -61,6 +61,9 @@ internal sealed class VideoSession : IDisposable
     public string DiagnosticPath { get; }
 
     public DateTime StartedAt { get; private set; }
+    private readonly System.Diagnostics.Stopwatch elapsed = new();
+    public TimeSpan Elapsed => elapsed.Elapsed;
+    internal string OutputDirectory => Path.GetDirectoryName(Path.GetFullPath(path))!;
     public string? FailureMessage => cpu?.FailureMessage ?? (active?.Completed.Task.IsFaulted == true
         ? active.Completed.Task.Exception?.GetBaseException().Message : null);
 
@@ -109,6 +112,7 @@ internal sealed class VideoSession : IDisposable
                 active = attempt;
                 BackendName = source.Name;
                 StartedAt = DateTime.Now;
+                elapsed.Restart();
                 return;
             }
             catch (Exception error)
@@ -129,6 +133,7 @@ internal sealed class VideoSession : IDisposable
             cpu = new FfmpegVideoSession(windowHandle, path, audio);
             await cpu.StartAsync();
             preferCpu = true; BackendName = "CPU / GDI"; StartedAt = cpu.StartedAt;
+            elapsed.Restart();
             File.AppendAllText(DiagnosticPath, "CPU / GDI started successfully\n");
         }
         catch (Exception error)
@@ -141,6 +146,7 @@ internal sealed class VideoSession : IDisposable
 
     public async Task<string?> StopAsync(bool save)
     {
+        elapsed.Stop();
         if (cpu is not null)
         {
             try { return await cpu.StopAsync(save); }

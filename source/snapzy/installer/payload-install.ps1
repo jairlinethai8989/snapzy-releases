@@ -55,8 +55,10 @@ function Expand-ManagedPayload([string]$Archive) {
     try {
         $zip=[IO.Compression.ZipFile]::OpenRead($Archive)
         foreach ($entry in $zip.Entries) {
-            if (-not $entry.FullName.TrimEnd('/')) { continue }
-            Get-SafePayloadFile $stage $entry.FullName.TrimEnd('/') | Out-Null
+            # Windows PowerShell Compress-Archive writes backslash-separated names.
+            $relative=$entry.FullName.Replace('\','/').TrimEnd('/')
+            if (-not $relative) { continue }
+            Get-SafePayloadFile $stage $relative | Out-Null
         }
         $zip.Dispose(); $zip=$null
         Expand-Archive -LiteralPath $Archive -DestinationPath $stage

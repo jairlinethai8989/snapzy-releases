@@ -5,12 +5,12 @@
     'เลือกพื้นที่หน้าจอ':'Select screen area','พื้นที่':'Area','เลือกหน้าต่าง':'Select window','หน้าต่าง':'Window','จับภาพยาวในบริเวณที่เลื่อน':'Capture scrolling content','ภาพยาว':'Scrolling',
     'บันทึกวิดีโอ MP4':'Record MP4','วิดีโอ':'Video','ทั้งหน้าจอ':'Full screen','หน่วง':'Delay','ทันที':'None','3 วินาที':'3 sec','5 วินาที':'5 sec','10 วินาที':'10 sec',
     'เปิดภาพ':'Open image','หน้าต่างใหม่':'New window','แท็บใหม่':'New tab','หยุดและบันทึก MP4':'Stop and save MP4','หยุด':'Stop','ยกเลิกวิดีโอ':'Cancel recording','ยกเลิก':'Cancel',
-    'ผู้พัฒนา:':'Developer:','อัปเดต:':'Updated:','7 ตุลาคม 2026':'October 6, 2026','มีอะไรใหม่ใน 1.0.0':"What's new in 1.0.0",'จัดชั้นวัตถุและภาพ ขึ้น–ลงทีละชั้น หรือบนสุด–ล่างสุด':'Move images and objects one layer up or down, or bring them to the front or back.',
-    'ย้ายชั้นภาพพร้อมคำอธิบายที่ติดกับภาพ':'Move an image together with its attached annotations.','รองรับ Undo/Redo และเก็บลำดับชั้นในไฟล์งาน':'Layer order is preserved in editable projects, with Undo and Redo support.',
+    'ผู้พัฒนา:':'Developer:','อัปเดต:':'Updated:','8 ตุลาคม 2026':'October 8, 2026','มีอะไรใหม่ใน 1.0.1':"What's new in 1.0.1",'อ่านข้อความทั้งภาพหรือพื้นที่ที่เลือกด้วย OCR แบบออฟไลน์ รองรับไทยและอังกฤษ':'Read a whole image or selected region with offline OCR for Thai and English.',
+    'ตรวจแก้ผลลัพธ์แบบข้อความหรือตารางก่อนคัดลอกได้':'Review and edit text or table output before copying.','แก้การเว้นช่องว่างผิดระหว่างอักษรไทย':'Fixed artificial spaces inserted between Thai characters.','ปรับหน้าต่าง OCR และสถานะการอ่านกับการคัดลอกให้ชัดเจน':'Refined the OCR window and its read and copy status.',
     'ติดตั้งตัวบันทึก CPU (FFmpeg)':'Install CPU recorder (FFmpeg)','ปิด':'Close','บันทึกเสียงด้วยหรือไม่?':'Record audio?','เสียงจากเครื่อง':'System audio','ไมโครโฟน':'Microphone','ไม่บันทึกเสียง':'No audio','เริ่มบันทึก':'Start recording',
     'โหมด':'Mode','เปิด SnapZy':'Open SnapZy','จับภาพเลือกพื้นที่':'Capture area','จับภาพหน้าต่าง':'Capture window','จับภาพยาว':'Scrolling capture','เปิดใช้คีย์ลัดนี้':'Enable this shortcut','ปุ่มคีย์ลัด':'Shortcut key',
     'เลือก Ctrl หรือ Alt อย่างน้อยหนึ่งปุ่ม':'Select at least Ctrl or Alt.','บันทึก':'Save','กำลังเลือกพื้นที่':'Selecting area','กำลังเลือกหน้าต่าง':'Selecting window','กำลังจับภาพยาว':'Capturing scrolling page',
-    'ภาพหน้าจอ':'Screenshot','กำลังเตรียมภาพ...':'Preparing image...','รวมภาพจากแท็บ':'Combine images from tabs','เพิ่มภาพ':'Add images','เปิดงาน SnapZy':'Open project','บันทึกงานเพื่อแก้ไขต่อ':'Save editable project','คัดลอกภาพ':'Copy image','บันทึก PNG':'Save PNG',
+    'ภาพหน้าจอ':'Screenshot','กำลังเตรียมภาพ...':'Preparing image...','รวมภาพจากแท็บ':'Combine images from tabs','เพิ่มภาพ':'Add images','อ่านข้อความ OCR':'Scan Text','เปิดงาน SnapZy':'Open project','บันทึกงานเพื่อแก้ไขต่อ':'Save editable project','คัดลอกภาพ':'Copy image','บันทึก PNG':'Save PNG',
     'เครื่องมือ':'Tools','ขนาดพื้นที่งาน':'Canvas size','พื้นที่งาน':'Canvas','เลือกและย้ายวัตถุ':'Select and move objects','เลือก':'Select','ครอบตัดภาพ':'Crop image','ครอบตัด':'Crop','วาดเส้นอิสระ':'Freehand pen','ปากกา':'Pen','ปากกาไฮไลต์':'Highlighter','ไฮไลต์':'Highlight',
     'วาดเส้นตรง':'Draw line','เส้น':'Line','วาดลูกศร':'Draw arrow','ลูกศร':'Arrow','กรอบสี่เหลี่ยมโปร่ง':'Outline rectangle','กรอบ':'Outline','เลือกรูปทรงโปร่ง':'Choose outline shape','รูปทรงโปร่ง':'Outline shapes','สี่เหลี่ยมโปร่ง':'Outline rectangle','กรอบวงกลมโปร่ง':'Outline circle','วงกลมโปร่ง':'Outline circle',
     'สี่เหลี่ยมทึบ':'Filled rectangle','ทึบ':'Fill','เลือกรูปทรงทึบ':'Choose filled shape','รูปทรงทึบ':'Filled shapes','วงกลมทึบ':'Filled circle','เบลอเฉพาะพื้นที่':'Blur selected area','เบลอ':'Blur','เลขลำดับในวงกลม':'Numbered marker','เลขลำดับ':'Number','วางข้อความบนภาพ':'Add text to image','ข้อความ':'Text','ช่องคำพูด':'Speech bubble',
@@ -49,7 +49,7 @@
   let observer;
 
   function updateProductIcon() {
-    for (const img of document.querySelectorAll('[data-product-icon]')) img.src = productName.toLowerCase() === 'snapzy' ? 'icons/snapzy.svg' : 'icons/snapzy.svg';
+    for (const img of document.querySelectorAll('[data-product-icon]')) img.src = productName.toLowerCase() === 'snapzy' ? 'icons/snapzy.svg' : 'icons/icon.svg';
   }
 
   function translateNode(node) {

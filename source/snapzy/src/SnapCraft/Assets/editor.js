@@ -572,6 +572,14 @@ async function exportBlob() { render(false); try { return await new Promise((res
 function imageSnapshot() { return JSON.stringify(projectState()); }
 function commitPendingEdit() { finishTextEdit?.(false); endGesture(); }
 window.neoSnapEditor = {
+  async openCapture(url) {
+    const image = await loadImage(url);
+    registerBaseImage(image);
+    baseImage = image; cropRect = { x: 0, y: 0, width: image.width, height: image.height };
+    canvas.width = image.width; canvas.height = image.height;
+    updateImageInfo(); document.querySelector('#loading').hidden = true; fitCanvas();
+    window.chrome?.webview?.postMessage({ action: 'editorReady' });
+  },
   exportProject, loadProject, combineProjects, addImages, resizeWorkspace,
   hasUnkeptChanges() { commitPendingEdit(); return !baseImage || keptSnapshot !== imageSnapshot(); },
   markKept(snapshot) { keptSnapshot = snapshot; },
@@ -587,7 +595,7 @@ window.neoSnapEditor = {
 document.querySelector('#downloadButton').onclick = async () => {
   if (window.chrome?.webview) { window.chrome.webview.postMessage({ action: 'saveImage' }); return; }
   commitPendingEdit();
-  const url = URL.createObjectURL(await exportBlob()); const link = document.createElement('a'); link.href = url; link.download = `snapzy-${Date.now()}.png`; link.click(); setTimeout(() => URL.revokeObjectURL(url), 60000);
+  const url = URL.createObjectURL(await exportBlob()); const link = document.createElement('a'); link.href = url; link.download = `neo-snap-${Date.now()}.png`; link.click(); setTimeout(() => URL.revokeObjectURL(url), 60000);
 };
 const copyButton = document.querySelector('#copyButton');
 let copyReset;
@@ -614,6 +622,10 @@ window.addEventListener('resize', fitCanvas);
 (async function init() {
   try {
     await document.fonts.ready;
+    if (new URLSearchParams(location.search).has('warm')) {
+      window.chrome?.webview?.postMessage({ action: 'editorPrepared' });
+      return;
+    }
     const imagePath = new URLSearchParams(location.search).get('image');
     const payload = imagePath ? { type: 'image', dataUrl: imagePath } : null;
     if (!payload && !new URLSearchParams(location.search).has('project')) throw new Error('ไม่พบภาพที่จับไว้');
@@ -621,7 +633,7 @@ window.addEventListener('resize', fitCanvas);
       const response=await fetch(new URLSearchParams(location.search).get('project'));
       if(!response.ok) throw new Error('อ่านไฟล์งานไม่ได้');
       const project=await response.json();
-      if(project.format==='snapzy-combine') await combineProjects(project.projects,project.layout,project.gap);
+      if(project.format==='neo-snap-combine') await combineProjects(project.projects,project.layout,project.gap);
       else await loadProject(project,true);
     } else {
       const image = await loadImage(payload.dataUrl);
@@ -643,7 +655,7 @@ const editorI18n = SnapCraftI18n.init({
     window.chrome?.webview?.postMessage({ action: 'language', language });
   }
 });
-const appVersion = window.chrome?.runtime?.getManifest?.().version || new URLSearchParams(location.search).get('version') || '1.0.0';
+const appVersion = window.chrome?.runtime?.getManifest?.().version || new URLSearchParams(location.search).get('version') || '1.0.1';
 editorI18n.setProductName(editorQuery.get('product') || 'SnapZy');
 document.querySelector('#editorAboutDialog details summary').textContent = SnapCraftI18n.formatReleaseLabel(appVersion, editorQuery.get('language') || document.documentElement.lang);
 document.querySelector('#appVersion').textContent = `v${appVersion}`;

@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <Version>1.0.0</Version>
+    <Version>1.0.1</Version>
     <Product>SnapZy</Product>
     <Authors>jairlinethai</Authors>
     <TargetFramework>net10.0-windows10.0.19041.0</TargetFramework>
@@ -19,8 +19,12 @@
     <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.4191.47" />
     <PackageReference Include="ScreenRecorderLib" Version="7.0.1" />
     <PackageReference Include="NAudio" Version="2.2.1" />
+    <PackageReference Include="Tesseract" Version="5.2.0" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Assets\**\*" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
+  <Target Name="RemoveUnusedOcrArchitecture" BeforeTargets="AssignTargetPaths">
+    <ItemGroup><None Remove="@(None)" Condition="'%(None.Link)' == 'x86\leptonica-1.82.0.dll' or '%(None.Link)' == 'x86\tesseract50.dll'" /></ItemGroup>
+  </Target>
 </Project>

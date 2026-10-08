@@ -16,6 +16,7 @@ internal sealed class ScrollStitcher : IDisposable
     private long retainedPixels;
     public int Count => tiles.Count;
     public int TotalHeight { get; private set; }
+    internal int FooterHeight => footerHeight;
 
     public TileResult Add(Bitmap input)
     {

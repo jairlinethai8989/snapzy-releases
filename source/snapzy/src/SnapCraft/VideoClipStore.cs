@@ -8,7 +8,7 @@ internal static class VideoClipStore
     {
         if (!File.Exists(source) || new FileInfo(source).Length == 0) throw new IOException("ไม่พบไฟล์วิดีโอที่บันทึกเสร็จ");
         Directory.CreateDirectory(DirectoryPath);
-        var destination = Path.Combine(DirectoryPath, $"snapzy-{DateTime.Now:yyyyMMdd-HHmmss}-{Guid.NewGuid():N}.mp4");
+        var destination = Path.Combine(DirectoryPath, $"neo-snap-{DateTime.Now:yyyyMMdd-HHmmss}-{Guid.NewGuid():N}.mp4");
         File.Move(source, destination);
         File.SetLastWriteTimeUtc(destination, DateTime.UtcNow);
         return destination;

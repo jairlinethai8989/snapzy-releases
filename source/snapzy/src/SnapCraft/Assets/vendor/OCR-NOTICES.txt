@@ -1,0 +1,19 @@
+Local OCR components
+
+Tesseract .NET wrapper 5.2.0: https://github.com/charlesw/tesseract
+Copyright Charles Weld and contributors. Apache License 2.0.
+
+Tesseract OCR 5.2.0: https://github.com/tesseract-ocr/tesseract
+Copyright the Tesseract contributors. Apache License 2.0.
+
+tessdata_fast English and Thai models:
+https://github.com/tesseract-ocr/tessdata_fast
+Revision 87416418657359cb625c412a48b6e1d6d41c29bd.
+Apache License 2.0. Models are downloaded only with user consent.
+
+Leptonica 1.82.0: https://github.com/DanBloomberg/leptonica
+Copyright Dan Bloomberg and contributors. BSD-style license.
+
+Full license texts accompany this notice in OCR-APACHE-LICENSE.txt
+and OCR-LEPTONICA-LICENSE.txt. Existing third-party licenses remain
+applicable; these components do not change the product's license.

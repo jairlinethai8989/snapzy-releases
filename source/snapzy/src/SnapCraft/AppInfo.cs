@@ -2,7 +2,7 @@ namespace SnapCraft;
 
 internal static class AppInfo
 {
-    public static string Version => typeof(AppInfo).Assembly.GetName().Version?.ToString(3) ?? "1.0.0";
+    public static string Version => typeof(AppInfo).Assembly.GetName().Version?.ToString(3) ?? "1.0.1";
     public const string Developer = "jairlinethai";
     public static string ProductName => ProductProfile.Current.ProductName;
     public static string AppUserModelId => ProductProfile.Current.AppUserModelId;

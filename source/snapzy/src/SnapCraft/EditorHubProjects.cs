@@ -26,7 +26,7 @@ internal sealed partial class EditorHubForm
         var web = page.Controls.OfType<WebView2>().Single();
         try
         {
-            using var dialog = new SaveFileDialog { Title = "SnapZy | บันทึกงาน", Filter = "SnapZy project (*.neosnap)|*.neosnap", FileName = $"snapzy-{DateTime.Now:yyyyMMdd-HHmmss}.neosnap", AddExtension = true };
+            using var dialog = new SaveFileDialog { Title = "SnapZy | บันทึกงาน", Filter = "SnapZy project (*.neosnap)|*.neosnap", FileName = $"neo-snap-{DateTime.Now:yyyyMMdd-HHmmss}.neosnap", AddExtension = true };
             if (dialog.ShowDialog(this) != DialogResult.OK) return;
             web.Enabled = false;
             if (projectOperations.TryGetValue(web, out var operation)) await operation.Task;
@@ -96,7 +96,7 @@ internal sealed partial class EditorHubForm
             }
             else
             {
-                var bytes = JsonSerializer.SerializeToUtf8Bytes(new { format = "snapzy-combine", layout = dialog.Arrangement, gap = dialog.Gap, projects });
+                var bytes = JsonSerializer.SerializeToUtf8Bytes(new { format = "neo-snap-combine", layout = dialog.Arrangement, gap = dialog.Gap, projects });
                 if (bytes.Length > ProjectSizeLimit) throw new IOException("งานรวมภาพใหญ่เกินไป");
                 temporary = Path.ChangeExtension(WebAssets.NewCapturePath(), ".neosnap");
                 await WritePngAsync(temporary, bytes);
