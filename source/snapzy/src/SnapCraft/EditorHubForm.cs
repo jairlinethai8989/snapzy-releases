@@ -18,6 +18,9 @@ internal sealed partial class EditorHubForm : Form
     private readonly TaskCompletionSource<bool> closed = new(TaskCreationOptions.RunContinuationsAsynchronously);
     private readonly Dictionary<TabPage, TaskCompletionSource<bool>> saves = new();
     private readonly Dictionary<WebView2, Task> initializations = new();
+    private readonly Dictionary<WebView2, System.Diagnostics.Stopwatch> captureClocks = new();
+    internal bool IsLoadingCapture => captureClocks.Count != 0;
+    internal event Action? CaptureReady;
 
     public EditorHubForm(Action showLauncher, Func<IEnumerable<EditorHubForm>>? getEditors = null, Action<string>? changeLanguage = null)
     {
@@ -51,17 +54,21 @@ internal sealed partial class EditorHubForm : Form
 
     public void AddCapture(string path)
     {
-        if (IsWarm && warmPage is not null)
+        if (warmup is not null && warmPage is not null)
         {
             var readyPage = warmPage;
             warmPage = null;
             readyPage.Text = $"ภาพ {++captureNumber}"; readyPage.Tag = path;
             var readyView = readyPage.Controls.OfType<WebView2>().Single();
+            captureClocks[readyView] = System.Diagnostics.Stopwatch.StartNew();
+            renderedViews.Remove(readyView);
+            _ = ShowNativePreviewAsync(readyPage, path);
             initializations[readyView] = LoadWarmCaptureAsync(readyView, path);
             return;
         }
         var page = new TabPage($"ภาพ {++captureNumber}") { Tag = path, BackColor = Color.White };
         var web = new WebView2 { Dock = DockStyle.Fill };
+        captureClocks[web] = System.Diagnostics.Stopwatch.StartNew();
         page.Controls.Add(web);
         tabs.TabPages.Add(page);
         tabs.SelectedTab = page;
@@ -88,7 +95,6 @@ internal sealed partial class EditorHubForm : Form
 
     private async Task InitializeEditorAsync(WebView2 web, string path)
     {
-        var readyClock = System.Diagnostics.Stopwatch.StartNew();
         try
         {
             var env = await BrowserEnvironment.GetAsync();
@@ -103,7 +109,13 @@ internal sealed partial class EditorHubForm : Form
                     ? message.RootElement.GetString()
                     : message.RootElement.GetProperty("action").GetString();
                 var page = tabs.TabPages.Cast<TabPage>().FirstOrDefault(page => page.Controls.Contains(web));
-                if (action == "editorReady") { renderedViews.Add(web); PerformanceTrace.Record("editor.ready", readyClock.Elapsed.TotalMilliseconds); warmReady?.TrySetResult(); RemoveNativePreview(page); }
+                if (action == "editorReady")
+                {
+                    renderedViews.Add(web);
+                    if (captureClocks.Remove(web, out var clock)) PerformanceTrace.Record("editor.ready", clock.Elapsed.TotalMilliseconds);
+                    RemoveNativePreview(page);
+                    CaptureReady?.Invoke();
+                }
                 if (action == "editorPrepared") warmReady?.TrySetResult();
                 if (action == "language") changeLanguage?.Invoke(message.RootElement.GetProperty("language").GetString() ?? ProductProfile.Current.DefaultLanguage);
                 if (action == "showLauncher") showLauncher();
@@ -170,6 +182,7 @@ internal sealed partial class EditorHubForm : Form
         initializations.Remove(web);
         historyIds.Remove(web); lastRecoveryState.Remove(web);
         renderedViews.Remove(web);
+        captureClocks.Remove(web);
         var path = page.Tag as string;
         tabs.TabPages.Remove(page);
         page.Dispose();

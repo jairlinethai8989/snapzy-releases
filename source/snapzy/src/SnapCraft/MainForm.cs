@@ -281,7 +281,11 @@ internal sealed partial class MainForm : Form
             hub = tabHub;
         }
         else hub = TakePreparedEditor();
-        if (editors.Add(hub)) hub.FormClosed += (_, _) => editors.Remove(hub);
+        if (editors.Add(hub))
+        {
+            hub.FormClosed += (_, _) => editors.Remove(hub);
+            hub.CaptureReady += () => _ = PrepareNextEditorAsync();
+        }
         hub.AddCapture(path);
         hub.Show();
         hub.Activate();

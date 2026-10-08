@@ -9,7 +9,7 @@ internal sealed partial class MainForm
     private Task EnsureBrowserAsync() => browserInitialization ??= InitializeBrowserAsync();
     private EditorHubForm TakePreparedEditor()
     {
-        if (warmEditor is not { IsWarm: true }) return new EditorHubForm(ShowLauncher, () => editors.ToArray(), ChangeLanguage);
+        if (warmEditor is null || warmEditor.IsDisposed) return new EditorHubForm(ShowLauncher, () => editors.ToArray(), ChangeLanguage);
         var editor = warmEditor; warmEditor = null; return editor;
     }
 
@@ -48,16 +48,15 @@ internal sealed partial class MainForm
 
     private async Task PrepareNextEditorAsync()
     {
-        if (warmEditor is not null || IsDisposed || exitApproved) return;
+        if (warmEditor is not null || IsDisposed || exitApproved || editors.Any(editor => editor.IsLoadingCapture)) return;
         await assetsPrepared;
-        if (warmEditor is not null || IsDisposed || exitApproved) return;
+        if (warmEditor is not null || IsDisposed || exitApproved || editors.Any(editor => editor.IsLoadingCapture)) return;
         var editor = new EditorHubForm(ShowLauncher, () => editors.ToArray(), ChangeLanguage);
         warmEditor = editor;
         try { await editor.PrepareWarmAsync(); }
         catch (Exception error) when (error is InvalidOperationException or ObjectDisposedException or System.Runtime.InteropServices.COMException or TimeoutException)
         {
-            if (warmEditor == editor) warmEditor = null;
-            editor.Dispose();
+            if (warmEditor == editor) { warmEditor = null; editor.Dispose(); }
         }
     }
 }

@@ -13,6 +13,7 @@ internal sealed class CaptureCoordinator
         using var totalTiming = PerformanceTrace.Measure("capture.total-including-selection");
         var selection = await SelectionOverlay.ChooseAsync(kind switch { CaptureKind.Window => SelectionMode.Window, CaptureKind.Scroll => SelectionMode.Scroll, _ => SelectionMode.Region });
         if (selection is null) return null;
+        using var afterSelection = PerformanceTrace.Measure("capture.selection-to-file");
         if (kind == CaptureKind.Scroll && selection.WindowHandle == IntPtr.Zero)
             throw new InvalidOperationException("ไม่พบหน้าต่างใต้กรอบที่เลือก");
         if (delayMs > 0)

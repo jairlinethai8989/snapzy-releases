@@ -107,11 +107,13 @@ internal sealed class SelectionOverlay : Form
 
     public static async Task<CaptureSelection?> ChooseAsync(SelectionMode mode)
     {
+        var clock = System.Diagnostics.Stopwatch.StartNew();
         using var overlay = new SelectionOverlay(mode);
         var completion = new TaskCompletionSource<CaptureSelection?>(TaskCreationOptions.RunContinuationsAsynchronously);
         overlay.FormClosed += (_, _) => completion.TrySetResult(overlay.Selection);
         using var escape = new EscapeHook(() => overlay.Close());
         overlay.Show();
+        PerformanceTrace.Record("capture.selection-visible", clock.Elapsed.TotalMilliseconds);
         return await completion.Task;
     }
 
